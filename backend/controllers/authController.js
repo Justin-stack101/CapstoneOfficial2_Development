@@ -739,7 +739,7 @@ export const updateStaffRole = async (req, res) => {
       return res.status(400).json({ message: 'Role is required.' });
     }
 
-    const validRoles = ['owner', 'assistant', 'sa'];
+    const validRoles = ['owner', 'admin', 'assistant', 'sa'];
     if (!validRoles.includes(role)) {
       return res.status(400).json({ message: 'Invalid role type.' });
     }

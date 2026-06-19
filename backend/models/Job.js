@@ -81,6 +81,16 @@ const jobSchema = new mongoose.Schema({
     required: true,
     default: 'Pending'
   },
+  location: {
+    type: String,
+    enum: ['None', 'Lift 1', 'Lift 2', 'Lift 3', 'Lift 4'],
+    default: 'None'
+  },
+  branch: {
+    type: String,
+    enum: ['Branch A', 'Branch B'],
+    default: 'Branch A'
+  },
   bayAssigned: {
     type: Number,
     default: null

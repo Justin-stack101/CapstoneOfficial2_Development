@@ -74,12 +74,12 @@ router.post('/mfa/disable', authenticateUser, disableMfa);
 router.post('/google/link', authenticateUser, googleLink);
 router.post('/google/unlink', authenticateUser, googleUnlink);
 
-// Owner-only staff management routes
-router.get('/staff', authenticateUser, requireRole(['owner']), getStaff);
-router.post('/staff', authenticateUser, requireRole(['owner']), createStaff);
-router.delete('/staff/:id', authenticateUser, requireRole(['owner']), deleteStaff);
-router.post('/staff/:id/reset-password', authenticateUser, requireRole(['owner']), resetStaffPassword);
-router.patch('/staff/:id/toggle-active', authenticateUser, requireRole(['owner']), toggleStaffActiveStatus);
-router.put('/staff/:id/role', authenticateUser, requireRole(['owner']), updateStaffRole);
+// Owner and Admin staff management routes
+router.get('/staff', authenticateUser, requireRole(['owner', 'admin']), getStaff);
+router.post('/staff', authenticateUser, requireRole(['owner', 'admin']), createStaff);
+router.delete('/staff/:id', authenticateUser, requireRole(['owner', 'admin']), deleteStaff);
+router.post('/staff/:id/reset-password', authenticateUser, requireRole(['owner', 'admin']), resetStaffPassword);
+router.patch('/staff/:id/toggle-active', authenticateUser, requireRole(['owner', 'admin']), toggleStaffActiveStatus);
+router.put('/staff/:id/role', authenticateUser, requireRole(['owner', 'admin']), updateStaffRole);
 
 export default router;

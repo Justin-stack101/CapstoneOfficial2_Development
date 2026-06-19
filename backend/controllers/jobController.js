@@ -43,7 +43,7 @@ export const getJobs = async (req, res) => {
 };
 
 export const createJob = async (req, res) => {
-  const { source, plate, name, contact, vehicle, category, concern, dateReceived, arrival, apptDate, apptTime, confirmed } = req.body;
+  const { source, plate, name, contact, vehicle, category, concern, dateReceived, arrival, apptDate, apptTime, confirmed, branch } = req.body;
 
   try {
     if (!plate || !name || !vehicle || !category) {
@@ -84,6 +84,8 @@ export const createJob = async (req, res) => {
       confirmed: confirmed || false,
       claimStub,
       status: initialStatus,
+      branch: branch || 'Branch A',
+      location: 'None',
       saName: isWalkin && req.user ? req.user.name : ''
     });
 
@@ -104,8 +106,35 @@ export const updateJobField = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
-    // Assigning the dynamic property
-    job[field] = value;
+    if (field === 'location') {
+      if (value && value.startsWith('Lift')) {
+        const liftNum = parseInt(value.split(' ')[1]) - 1; // 0-indexed lift
+
+        // Collision Check: Check if lift is occupied by any other active job
+        const liftOccupied = await Job.findOne({
+          id: { $ne: id },
+          location: value,
+          status: { $nin: ['Completed', 'Released'] }
+        });
+
+        if (liftOccupied) {
+          return res.status(400).json({ message: `Lift 0${liftNum + 1} is already occupied by vehicle ${liftOccupied.plate}!` });
+        }
+
+        job.location = value;
+        job.bayAssigned = liftNum;
+        job.status = 'In Progress';
+      } else {
+        job.location = 'None';
+        job.bayAssigned = null;
+        if (job.status === 'In Progress') {
+          job.status = 'Waiting';
+        }
+      }
+    } else {
+      // Assigning other properties
+      job[field] = value;
+    }
 
     // Auto-calculate goalStatus if relevant fields change
     if (field === 'arrival' || field === 'departure' || field === 'category') {
@@ -144,28 +173,13 @@ export const setJobStatus = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
-    let previousBay = job.bayAssigned;
-    let newBay = null;
-
-    if (status.startsWith('Lift')) {
-      const liftNum = parseInt(status.split(' ')[1]) - 1; // 0-indexed lift
-
-      // Collision Check: Check if lift is occupied by any other active job
-      const liftOccupied = await Job.findOne({
-        id: { $ne: id },
-        bayAssigned: liftNum,
-        status: { $regex: /^Lift|^In Service/ }
-      });
-
-      if (liftOccupied) {
-        return res.status(400).json({ message: `Lift 0${liftNum + 1} is already occupied by vehicle ${liftOccupied.plate}!` });
-      }
-
-      newBay = liftNum;
-    }
-
     job.status = status;
-    job.bayAssigned = newBay;
+
+    // Clear location if moving to non-working states
+    if (status === 'Ready' || status === 'Released' || status === 'Completed' || status === 'Carry Over' || status === 'Waiting') {
+      job.location = 'None';
+      job.bayAssigned = null;
+    }
 
     // If online booking becomes Waiting/Active and has no claim stub yet, generate one
     if (status === 'Waiting' && job.source === 'Online' && !job.claimStub) {

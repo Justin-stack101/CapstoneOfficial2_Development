@@ -36,6 +36,7 @@ const seedDatabase = async () => {
       console.log('Seeding default staff credentials...');
       const defaultUsers = [
         { name: 'System Owner', role: 'owner', email: 'owner@hontech.com', password: 'owner123' },
+        { name: 'System Admin', role: 'admin', email: 'admin@hontech.com', password: 'admin123' },
         { name: 'Jessica (Front Desk)', role: 'assistant', email: 'staff@hontech.com', password: 'staff123' },
         { name: 'Mark (Advisor)', role: 'sa', email: 'sa@hontech.com', password: 'sa123' },
         { name: 'Dave (Advisor)', role: 'sa', email: 'tech@hontech.com', password: 'tech123' }
@@ -314,7 +315,13 @@ const seedDatabase = async () => {
         }
       ];
 
-      await Job.insertMany(defaultJobs);
+      const seededJobs = defaultJobs.map((job, index) => ({
+        ...job,
+        branch: index % 2 === 0 ? 'Branch A' : 'Branch B',
+        location: (job.status && job.status.startsWith('Lift')) ? job.status : 'None'
+      }));
+
+      await Job.insertMany(seededJobs);
       console.log('Placeholder and historical seed jobs successfully saved!');
     }
   } catch (error) {
