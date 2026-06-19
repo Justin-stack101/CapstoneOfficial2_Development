@@ -1,0 +1,114 @@
+import mongoose from 'mongoose';
+
+const jobSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  source: {
+    type: String,
+    enum: ['Walk-in', 'Online'],
+    required: true
+  },
+  plate: {
+    type: String,
+    required: true,
+    uppercase: true,
+    trim: true
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  contact: {
+    type: String,
+    trim: true
+  },
+  vehicle: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  concern: {
+    type: String,
+    trim: true
+  },
+  dateReceived: {
+    type: String, // Stored as YYYY-MM-DD for standard front-end formatting compatibility
+    required: true
+  },
+  arrival: {
+    type: String, // HH:MM format
+    default: ''
+  },
+  departure: {
+    type: String, // HH:MM format
+    default: ''
+  },
+  apptDate: {
+    type: String, // YYYY-MM-DD format
+    default: ''
+  },
+  apptTime: {
+    type: String, // HH:MM format
+    default: ''
+  },
+  confirmed: {
+    type: Boolean,
+    default: false
+  },
+  claimStub: {
+    type: String,
+    default: ''
+  },
+  partsAvailable: {
+    type: String,
+    enum: ['Pending', 'Yes', 'No', 'WCA'],
+    default: 'Pending'
+  },
+  evaluation: {
+    type: String,
+    default: ''
+  },
+  status: {
+    type: String,
+    required: true,
+    default: 'Pending'
+  },
+  bayAssigned: {
+    type: Number,
+    default: null
+  },
+  promisedDate: {
+    type: String, // YYYY-MM-DD format
+    default: ''
+  },
+  remarks: {
+    type: String,
+    default: ''
+  },
+  saName: {
+    type: String,
+    default: ''
+  },
+  goalStatus: {
+    type: String,
+    enum: ['Successful', 'Failed', 'N/A'],
+    default: 'N/A'
+  },
+  dateCompleted: {
+    type: String,
+    default: ''
+  }
+}, {
+  timestamps: true
+});
+
+const Job = mongoose.model('Job', jobSchema);
+export default Job;
