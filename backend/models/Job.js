@@ -112,6 +112,15 @@ const jobSchema = new mongoose.Schema({
     enum: ['Successful', 'Failed', 'N/A'],
     default: 'N/A'
   },
+  recommendation: {
+    type: String,
+    enum: ['None', 'Pending Approval', 'Approved', 'Declined'],
+    default: 'None'
+  },
+  recommendationNotes: {
+    type: String,
+    default: ''
+  },
   dateCompleted: {
     type: String,
     default: ''

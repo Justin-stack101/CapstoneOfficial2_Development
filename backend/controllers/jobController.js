@@ -27,13 +27,9 @@ const generateStubNumber = async () => {
 
 export const getJobs = async (req, res) => {
   try {
-    let query = { status: { $ne: 'Completed' } };
-    if (req.user && req.user.role === 'sa' && req.query.monitor !== 'true') {
-      query.$or = [
-        { saName: req.user.name },
-        { saName: '' },
-        { saName: null }
-      ];
+    let query = {};
+    if (req.query.all !== 'true' && req.query.monitor !== 'true') {
+      query.status = { $ne: 'Completed' };
     }
     const jobs = await Job.find(query).sort({ updatedAt: -1 });
     res.status(200).json(jobs);
@@ -106,6 +102,24 @@ export const updateJobField = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
+    // Role Security Partitioning Enforcement
+    if (req.user.role === 'owner' || req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Access forbidden. Owners and Admins are read-only for operational records.' });
+    }
+
+    if (req.user.role === 'assistant' && job.status !== 'Pending') {
+      return res.status(403).json({ message: 'Access forbidden. Assistant is read-only for active workshop records.' });
+    }
+
+    if (req.user.role === 'sa') {
+      const isClaiming = field === 'saName' && value === req.user.name;
+      const isUnassigned = !job.saName || job.saName.trim() === '';
+      const isAssignedToSelf = job.saName === req.user.name;
+      if (!isAssignedToSelf && !isClaiming && !isUnassigned) {
+        return res.status(403).json({ message: 'Access forbidden. You can only modify jobs assigned to you.' });
+      }
+    }
+
     if (field === 'location') {
       if (value && value.startsWith('Lift')) {
         const liftNum = parseInt(value.split(' ')[1]) - 1; // 0-indexed lift
@@ -173,6 +187,23 @@ export const setJobStatus = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
+    // Role Security Partitioning Enforcement
+    if (req.user.role === 'owner' || req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Access forbidden. Owners and Admins are read-only for operational records.' });
+    }
+
+    if (req.user.role === 'assistant' && job.status !== 'Pending') {
+      return res.status(403).json({ message: 'Access forbidden. Assistant is read-only for active workshop records.' });
+    }
+
+    if (req.user.role === 'sa') {
+      const isAssignedToSelf = job.saName === req.user.name;
+      const isUnassigned = !job.saName || job.saName.trim() === '';
+      if (!isAssignedToSelf && !isUnassigned) {
+        return res.status(403).json({ message: 'Access forbidden. You can only modify status on jobs assigned to you.' });
+      }
+    }
+
     job.status = status;
 
     // Clear location if moving to non-working states
@@ -231,10 +262,16 @@ export const deleteJob = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedJob = await Job.findOneAndDelete({ id });
-    if (!deletedJob) {
+    const job = await Job.findOne({ id });
+    if (!job) {
       return res.status(404).json({ message: 'Job record not found.' });
     }
+
+    if (req.user.role === 'assistant' && job.status !== 'Pending') {
+      return res.status(403).json({ message: 'Access forbidden. Assistant can only delete pending bookings.' });
+    }
+
+    await Job.findOneAndDelete({ id });
     res.status(200).json({ message: 'Job successfully removed from system.' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting job record.', error: error.message });
