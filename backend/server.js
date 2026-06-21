@@ -31,22 +31,21 @@ await connectDB();
 // Database seeding function
 const seedDatabase = async () => {
   try {
-    const userCount = await User.countDocuments();
-    if (userCount === 0) {
-      console.log('Seeding default staff credentials...');
-      const defaultUsers = [
-        { name: 'System Owner', role: 'owner', email: 'owner@hontech.com', password: 'owner123' },
-        { name: 'System Admin', role: 'admin', email: 'admin@hontech.com', password: 'admin123' },
-        { name: 'Jessica (Front Desk)', role: 'assistant', email: 'staff@hontech.com', password: 'staff123' },
-        { name: 'Mark (Advisor)', role: 'sa', email: 'sa@hontech.com', password: 'sa123' },
-        { name: 'Dave (Advisor)', role: 'sa', email: 'tech@hontech.com', password: 'tech123' }
-      ];
+    const defaultUsers = [
+      { name: 'System Owner', role: 'owner', email: 'owner@hontech.com', password: 'owner123' },
+      { name: 'System Admin', role: 'admin', email: 'admin@hontech.com', password: 'admin123' },
+      { name: 'Jessica (Front Desk)', role: 'assistant', email: 'staff@hontech.com', password: 'staff123' },
+      { name: 'Mark (Advisor)', role: 'sa', email: 'sa@hontech.com', password: 'sa123' },
+      { name: 'Dave (Advisor)', role: 'sa', email: 'tech@hontech.com', password: 'tech123' }
+    ];
 
-      for (const u of defaultUsers) {
+    for (const u of defaultUsers) {
+      const exists = await User.findOne({ email: u.email });
+      if (!exists) {
+        console.log(`Seeding missing default credential for ${u.name} (${u.email})...`);
         const newUser = new User(u);
         await newUser.save(); // Password is hashed pre-save
       }
-      console.log('Default credentials successfully seeded!');
     }
 
     const jobCount = await Job.countDocuments();

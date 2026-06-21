@@ -7,12 +7,100 @@
     <title> HonTech</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        red: {
+                            50: 'var(--color-red-50)',
+                            100: 'var(--color-red-100)',
+                            200: 'var(--color-red-200)',
+                            300: 'var(--color-red-300)',
+                            400: 'var(--color-red-400)',
+                            500: 'var(--color-red-500)',
+                            600: 'var(--color-red-600)',
+                            700: 'var(--color-red-700)',
+                            800: 'var(--color-red-800)',
+                            900: 'var(--color-red-900)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/css/main.css">
     <style>
+        :root {
+            /* Default Red Theme */
+            --color-red-50: #fef2f2;
+            --color-red-100: #fee2e2;
+            --color-red-200: #fecaca;
+            --color-red-300: #fca5a5;
+            --color-red-400: #f87171;
+            --color-red-500: #ef4444;
+            --color-red-600: #dc2626;
+            --color-red-700: #b91c1c;
+            --color-red-800: #991b1b;
+            --color-red-900: #7f1d1d;
+        }
+
+        body.theme-teal {
+            --color-red-50: #f0fdfa;
+            --color-red-100: #ccfbf1;
+            --color-red-200: #99f6e4;
+            --color-red-300: #5eead4;
+            --color-red-400: #2dd4bf;
+            --color-red-500: #14b8a6;
+            --color-red-600: #0d9488;
+            --color-red-700: #0f766e;
+            --color-red-800: #115e59;
+            --color-red-900: #134e4a;
+        }
+
+        body.theme-blue {
+            --color-red-50: #eff6ff;
+            --color-red-100: #dbeafe;
+            --color-red-200: #bfdbfe;
+            --color-red-300: #93c5fd;
+            --color-red-400: #60a5fa;
+            --color-red-500: #3b82f6;
+            --color-red-600: #2563eb;
+            --color-red-700: #1d4ed8;
+            --color-red-800: #1e40af;
+            --color-red-900: #1e3a8a;
+        }
+
+        body.theme-purple {
+            --color-red-50: #faf5ff;
+            --color-red-100: #f3e8ff;
+            --color-red-200: #e9d5ff;
+            --color-red-300: #d8b4fe;
+            --color-red-400: #c084fc;
+            --color-red-500: #a855f7;
+            --color-red-600: #9333ea;
+            --color-red-700: #7e22ce;
+            --color-red-800: #6b21a8;
+            --color-red-900: #581c87;
+        }
+
+        body.theme-orange {
+            --color-red-50: #fff7ed;
+            --color-red-100: #ffedd5;
+            --color-red-200: #fed7aa;
+            --color-red-300: #fdba74;
+            --color-red-400: #fb923c;
+            --color-red-500: #f97316;
+            --color-red-600: #ea580c;
+            --color-red-700: #c2410c;
+            --color-red-800: #9a3412;
+            --color-red-900: #7c2d12;
+        }
+
         .tv-slide.hidden {
             display: none !important;
         }
@@ -31,9 +119,14 @@
             <!-- Logo & Brand Header -->
             <div class="flex items-center gap-3 z-10">
                 <i data-lucide="wrench" class="w-8 h-8 text-red-500 drop-shadow"></i>
-                <span class="font-black italic uppercase tracking-tighter text-3xl leading-none drop-shadow-md">
-                    HonTech
-                </span>
+                <div class="flex flex-col">
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-black italic uppercase tracking-tighter text-3xl leading-none drop-shadow-md">
+                            HonTech
+                        </span>
+                        <span class="text-[10px] font-bold tracking-wider text-red-200 bg-red-800/30 px-1.5 py-0.5 rounded border border-red-500/30">v1.0.0-beta</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Marketing Heading -->
@@ -318,9 +411,11 @@
             <div class="h-full bg-red-600 text-white flex items-center pl-8 pr-16 slanted-logo-bg shadow-inner">
                 <div class="flex items-center gap-3">
                     <i data-lucide="wrench" class="w-6 h-6"></i>
-                    <div>
-                        <span
-                            class="font-black italic uppercase tracking-tighter text-2xl leading-none block drop-shadow-md">HonTech</span>
+                    <div class="flex flex-col">
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-black italic uppercase tracking-tighter text-2xl leading-none block drop-shadow-md">HonTech</span>
+                            <span class="text-[10px] font-bold tracking-wider text-red-200 bg-red-800/30 px-1.5 py-0.5 rounded border border-red-500/30">v1.0.0-beta</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -334,21 +429,67 @@
                     <span class="text-[10px] font-bold uppercase text-gray-600 tracking-widest">System Online</span>
                 </div>
 
-                <div class="flex items-center gap-3 hidden md:flex">
-                    <div class="text-right">
-                        <p class="text-sm font-bold text-gray-900 leading-tight" id="sidebar-user-name">User</p>
-                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest" id="sidebar-user-role">
-                            Role</p>
-                    </div>
-                    <div
-                        class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500">
-                        <i data-lucide="user" class="w-5 h-5"></i>
+                <!-- User Profile Dropdown Container -->
+                <div class="relative">
+                    <button onclick="toggleUserDropdown()" class="flex items-center gap-3 focus:outline-none hover:opacity-90 transition">
+                        <div class="text-right hidden md:block">
+                            <p class="text-sm font-bold text-gray-900 leading-tight" id="sidebar-user-name">User</p>
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest" id="sidebar-user-role">Role</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 border border-red-200 flex items-center justify-center font-bold relative">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full animate-pulse"></span>
+                        </div>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl border border-gray-200 shadow-xl z-[999] py-4 divide-y divide-gray-100">
+                        <!-- User Info -->
+                        <div class="px-5 pb-3">
+                            <p class="text-sm font-black text-gray-900" id="dropdown-user-name">User</p>
+                            <p class="text-xs font-semibold text-gray-500 truncate" id="dropdown-user-email">user@hontech.com</p>
+                            <span class="inline-flex mt-2 items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-600 border border-red-100" id="dropdown-user-role">
+                                Role
+                            </span>
+                        </div>
+
+                        <!-- Theme Switcher Section -->
+                        <div class="px-5 py-3">
+                            <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Switch Color Theme</span>
+                            <div class="flex items-center gap-3">
+                                <button onclick="setTheme('default')" class="w-6 h-6 rounded-full bg-red-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Red (Default)" id="theme-btn-default"></button>
+                                <button onclick="setTheme('teal')" class="w-6 h-6 rounded-full bg-teal-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Teal" id="theme-btn-teal"></button>
+                                <button onclick="setTheme('blue')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Blue" id="theme-btn-blue"></button>
+                                <button onclick="setTheme('purple')" class="w-6 h-6 rounded-full bg-purple-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Purple" id="theme-btn-purple"></button>
+                                <button onclick="setTheme('orange')" class="w-6 h-6 rounded-full bg-orange-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Orange" id="theme-btn-orange"></button>
+                            </div>
+                        </div>
+
+                        <!-- Standard User Links -->
+                        <div class="px-3 py-2">
+                            <button onclick="alert('Navigate to Profile')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                                <i data-lucide="user-circle" class="w-4 h-4 text-gray-400"></i>
+                                My Profile
+                            </button>
+                            <button onclick="alert('Navigate to Settings')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                                <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+                                Account Settings
+                            </button>
+                            <button onclick="alert('Open Support Center')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                                <i data-lucide="help-circle" class="w-4 h-4 text-gray-400"></i>
+                                Help & Support
+                            </button>
+                        </div>
+
+                        <!-- Sign Out Action -->
+                        <div class="px-3 py-2">
+                            <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition">
+                                <i data-lucide="log-out" class="w-4 h-4"></i>
+                                Sign Out
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <button onclick="handleLogout()" class="text-gray-400 hover:text-red-600 transition" title="Logout">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                </button>
             </div>
         </header>
 
@@ -993,7 +1134,6 @@
                                     <th>Appointment (Date, Time)</th>
                                     <th>Parts</th>
                                     <th>Confirmed</th>
-                                    <th>Evaluation Notes</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
@@ -1095,12 +1235,26 @@
                             class="text-3xl font-black uppercase italic tracking-tight text-white flex items-center gap-3">
                             <i data-lucide="monitor" class="text-red-500"></i> Service Monitor
                         </h1>
+                        <p id="tv-date-display" class="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">Sunday, June 21, 2026</p>
                     </div>
-                    <div class="text-right">
-                        <p id="tv-clock-display" class="text-4xl font-black text-gray-400 tabular-nums">00:00</p>
-                        <div class="flex gap-2 justify-end mt-3">
-                            <span id="tv-dot-0" class="w-3 h-3 rounded-full bg-gray-600 transition-all"></span>
-                            <span id="tv-dot-1" class="w-3 h-3 rounded-full bg-gray-600 transition-all"></span>
+                    <div class="flex items-center gap-6 text-right">
+                        <!-- Weather Widget -->
+                        <div class="flex items-center gap-2.5 bg-gray-800/40 border border-gray-850 px-4 py-2 rounded-2xl">
+                            <span id="tv-weather-icon-wrap" class="flex items-center justify-center">
+                                <i data-lucide="sun" class="w-5 h-5 text-amber-400"></i>
+                            </span>
+                            <div class="text-left leading-none">
+                                <p id="tv-temp-display" class="text-lg font-black text-white">32°C</p>
+                                <p id="tv-weather-text" class="text-[9px] font-bold text-gray-400 uppercase tracking-wider mt-0.5">Sunny</p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p id="tv-clock-display" class="text-4xl font-black text-gray-300 tabular-nums leading-none">00:00</p>
+                            <div class="flex gap-2 justify-end mt-2">
+                                <span id="tv-dot-0" class="w-2.5 h-2.5 rounded-full bg-gray-600 transition-all"></span>
+                                <span id="tv-dot-1" class="w-2.5 h-2.5 rounded-full bg-gray-600 transition-all"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1117,12 +1271,26 @@
                         </div>
                     </div>
                     <div id="tv-slide-2"
-                        class="absolute inset-0 tv-slide hidden flex flex-row gap-6 p-6 bg-gray-50 rounded-2xl overflow-hidden shadow-2xl">
+                        class="absolute inset-0 tv-slide hidden flex flex-col gap-6 p-6 bg-gray-50 rounded-2xl overflow-hidden shadow-2xl">
                         
-                        <!-- Left Column: Released (Top) & Upcoming (Bottom) (Scrollable feed) -->
-                        <div class="flex-1 flex flex-col gap-6 min-h-0">
-                            <!-- Ready for Release (Top) -->
-                            <div class="bg-white rounded-2xl overflow-hidden flex flex-col flex-1 min-h-0 shadow-md border border-green-200">
+                        <!-- Top Row: Service Queue (Waiting List) & Ready for Release (Equal Size side-by-side) -->
+                        <div class="flex-1 grid grid-cols-2 gap-6 min-h-0">
+                            <!-- Service Queue (Waiting List) -->
+                            <div class="bg-white rounded-2xl overflow-hidden flex flex-col min-h-0 shadow-md border border-blue-200">
+                                <div class="bg-blue-600 py-3 text-center shrink-0 border-b border-blue-700">
+                                    <h3 class="text-2xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-2">
+                                        Service Queue
+                                        <span class="text-sm font-bold px-2.5 py-0.5 rounded-full bg-blue-700 text-white border border-blue-500" id="tv-all-upcoming-count">0</span>
+                                    </h3>
+                                    <p class="text-blue-200 font-bold uppercase tracking-[0.15em] text-[10px] mt-0.5">Waiting List</p>
+                                </div>
+                                <div class="p-4 bg-blue-50/20 flex-1 overflow-y-auto custom-scroll">
+                                    <div id="tv-all-upcoming-list" class="flex flex-col gap-2"></div>
+                                </div>
+                            </div>
+
+                            <!-- Ready for Release -->
+                            <div class="bg-white rounded-2xl overflow-hidden flex flex-col min-h-0 shadow-md border border-green-200">
                                 <div class="bg-green-600 py-3 text-center shrink-0 border-b border-green-700">
                                     <h3 class="text-2xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-2">
                                         Ready for Release
@@ -1131,38 +1299,22 @@
                                     <p class="text-green-200 font-bold uppercase tracking-[0.15em] text-[10px] mt-0.5">Please proceed to front desk</p>
                                 </div>
                                 <div class="p-4 bg-green-50/20 flex-1 overflow-y-auto custom-scroll">
-                                    <div id="tv-all-released-list" class="grid grid-cols-2 gap-4"></div>
-                                </div>
-                            </div>
-
-                            <!-- Upcoming Vehicles (Bottom) -->
-                            <div class="bg-white rounded-2xl overflow-hidden flex flex-col flex-1 min-h-0 shadow-md border border-blue-200">
-                                <div class="bg-blue-600 py-3 text-center shrink-0 border-b border-blue-700">
-                                    <h3 class="text-2xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-2">
-                                        Upcoming Vehicles
-                                        <span class="text-sm font-bold px-2.5 py-0.5 rounded-full bg-blue-700 text-white border border-blue-500" id="tv-all-upcoming-count">0</span>
-                                    </h3>
-                                    <p class="text-blue-200 font-bold uppercase tracking-[0.15em] text-[10px] mt-0.5">In Queue</p>
-                                </div>
-                                <div class="p-4 bg-blue-50/20 flex-1 overflow-y-auto custom-scroll">
-                                    <div id="tv-all-upcoming-list" class="grid grid-cols-2 gap-4"></div>
+                                    <div id="tv-all-released-list" class="flex flex-col gap-2"></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Right Column: Carry Over (Full Height) -->
-                        <div class="flex-1 flex flex-col min-h-0">
-                            <div class="flex-1 bg-white rounded-2xl overflow-hidden flex flex-col min-h-0 shadow-md border border-orange-200">
-                                <div class="bg-orange-500 py-4 text-center shrink-0 border-b border-orange-600">
-                                    <h3 class="text-3xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-2">
-                                        Carry-Over
-                                        <span class="text-sm font-bold px-2.5 py-0.5 rounded-full bg-orange-600 text-white border border-orange-400" id="tv-all-carryover-count">0</span>
-                                    </h3>
-                                    <p class="text-orange-100 font-bold uppercase tracking-[0.15em] text-xs mt-1">Extended Stay / Awaiting Parts</p>
-                                </div>
-                                <div class="flex-1 p-5 bg-orange-50/10 overflow-y-auto min-h-0 custom-scroll">
-                                    <div id="tv-all-carryover-list" class="grid grid-cols-2 gap-4"></div>
-                                </div>
+                        <!-- Bottom Row: Carry-Over (Full width / Bigger) -->
+                        <div class="flex-1 flex flex-col min-h-0 bg-white rounded-2xl overflow-hidden shadow-md border border-orange-200">
+                            <div class="bg-orange-500 py-3 text-center shrink-0 border-b border-orange-600">
+                                <h3 class="text-2xl font-black uppercase tracking-widest text-white flex items-center justify-center gap-2">
+                                    Carry-Over
+                                    <span class="text-sm font-bold px-2.5 py-0.5 rounded-full bg-orange-600 text-white border border-orange-400" id="tv-all-carryover-count">0</span>
+                                </h3>
+                                <p class="text-orange-100 font-bold uppercase tracking-[0.15em] text-[10px] mt-0.5">Extended Stay / Awaiting Parts</p>
+                            </div>
+                            <div class="p-4 bg-orange-50/20 flex-1 overflow-y-auto custom-scroll">
+                                <div id="tv-all-carryover-list" class="grid grid-cols-3 gap-3"></div>
                             </div>
                         </div>
                     </div>
@@ -1742,6 +1894,7 @@
         let staffAccounts = [];
         let currentUserRole = '';
         let currentUserName = '';
+        let currentUserEmail = '';
         let bays = [null, null, null, null];
 
         let tvSlideIndex = 0;
@@ -1785,6 +1938,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
+            initTheme();
             const urlParams = new URLSearchParams(window.location.search);
             const isTVMode = urlParams.get('mode') === 'tv';
 
@@ -1798,6 +1952,7 @@
                 const user = await apiRequest('/api/auth/me');
                 if (user) {
                     currentUserName = user.name;
+                    currentUserEmail = user.email || 'user@hontech.com';
                     handleLogin(user.role);
                 }
             } catch (e) {
@@ -1839,6 +1994,7 @@
                 }
 
                 currentUserName = res.name;
+                currentUserEmail = res.email || 'user@hontech.com';
                 handleLogin(res.role);
                 showSystemToast('Logged in successfully.', 'success', 'Access Granted');
             } catch (err) {
@@ -1941,6 +2097,15 @@
             let defaultView = 'queue';
 
             document.getElementById('sidebar-user-name').innerText = currentUserName || 'System User';
+            if (document.getElementById('dropdown-user-name')) {
+                document.getElementById('dropdown-user-name').innerText = currentUserName || 'System User';
+            }
+            if (document.getElementById('dropdown-user-email')) {
+                document.getElementById('dropdown-user-email').innerText = currentUserEmail || 'user@hontech.com';
+            }
+            if (document.getElementById('dropdown-user-role')) {
+                document.getElementById('dropdown-user-role').innerText = getRoleLabel(role);
+            }
 
             if (role === 'owner') {
                 document.getElementById('sidebar-user-role').innerText = 'Owner';
@@ -2009,7 +2174,53 @@
             document.getElementById('auth-view').classList.remove('hidden');
             currentUserRole = '';
             currentUserName = '';
+            currentUserEmail = '';
             document.getElementById('login-pass').value = '';
+
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+        }
+
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown) dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('user-dropdown');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                const btn = dropdown.previousElementSibling;
+                if (btn && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            }
+        });
+
+        function setTheme(theme) {
+            document.body.classList.remove('theme-teal', 'theme-blue', 'theme-purple', 'theme-orange');
+            if (theme !== 'default') {
+                document.body.classList.add(`theme-${theme}`);
+            }
+            localStorage.setItem('hontech-theme', theme);
+
+            // Highlight selected theme button in dropdown
+            const themes = ['default', 'teal', 'blue', 'purple', 'orange'];
+            themes.forEach(t => {
+                const btn = document.getElementById(`theme-btn-${t}`);
+                if (btn) {
+                    if (t === theme) {
+                        btn.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.3)';
+                    } else {
+                        btn.style.boxShadow = 'none';
+                    }
+                }
+            });
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('hontech-theme') || 'default';
+            setTheme(savedTheme);
         }
 
         function showSection(id, btnElement) {
@@ -2439,6 +2650,7 @@
 
         function renderStaffTables() {
             const isOwner = currentUserRole === 'owner';
+            const isAdmin = currentUserRole === 'admin';
             const isAsst = currentUserRole === 'assistant';
             const isSA = currentUserRole === 'sa';
             const isTech = currentUserRole === 'tech';
@@ -2466,22 +2678,25 @@
                             </div>
                         </td>
                         <td>
+                            ${isOwner ? `
                             <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-24 border border-gray-200" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : 'color:#6b7280'}">
                                 <option value="Pending" ${job.partsAvailable === 'Pending' ? 'selected' : ''}>Pend</option>
                                 <option value="Yes" ${job.partsAvailable === 'Yes' ? 'selected' : ''}>Yes</option>
                                 <option value="No" ${job.partsAvailable === 'No' ? 'selected' : ''}>No</option>
                             </select>
+                            ` : `
+                            <span class="text-xs font-bold uppercase ${job.partsAvailable === 'Yes' ? 'text-green-600' : job.partsAvailable === 'No' ? 'text-red-600' : 'text-gray-500'}">${job.partsAvailable}</span>
+                            `}
                         </td>
                         <td class="text-center">
                             <input type="checkbox" ${job.confirmed ? 'checked' : ''} onchange="updateCheckbox('${job.id}', 'confirmed', this.checked)">
                         </td>
-                        <td><input type="text" value="${job.evaluation || ''}" placeholder="Evaluation..." onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 w-48 border border-gray-200 bg-white"></td>
                         <td class="text-right flex items-center justify-end gap-2">
                             <button onclick="setJobStatus('${job.id}', 'Waiting')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition shadow-sm">Push Active</button>
                             <button onclick="removeJob('${job.id}')" class="text-gray-400 hover:text-red-500 p-1 transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </td>
                     </tr>
-                `).join('') || `<tr><td colspan="8" class="text-center py-8 text-gray-500 font-medium">No pending online bookings.</td></tr>`;
+                `).join('') || `<tr><td colspan="7" class="text-center py-8 text-gray-500 font-medium">No pending online bookings.</td></tr>`;
             }
 
             // DAILY INTAKES
@@ -2730,7 +2945,7 @@
                             </div>
                         </td>
                         <td>
-                            ${canEdit ? `
+                            ${(isSA || isOwner || isAdmin) ? `
                             <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-28 border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
                                 <option value="Yes" ${job.partsAvailable === 'Yes' ? 'selected' : ''}>Yes</option>
                                 <option value="No" ${job.partsAvailable === 'No' ? 'selected' : ''}>No</option>
@@ -3978,8 +4193,23 @@
                 }
             }, 2000);
 
-            tvInterval = setInterval(rotateTVSlides, 10000);
+            // Set slide interval to 15 seconds (15000ms) for longer display time
+            tvInterval = setInterval(rotateTVSlides, 15000);
             setInterval(updateClock, 1000);
+            
+            // Initial weather fetch, and poll weather every 15 minutes
+            updateWeather();
+            setInterval(updateWeather, 900000);
+            
+            // Developer shortcut: Click the TV screen to manually rotate slides instantly
+            document.getElementById('section-tv').addEventListener('click', (e) => {
+                // Prevent click triggers from inside buttons or input fields if any
+                if (e.target.closest('button, select, input, a')) return;
+                rotateTVSlides();
+                if (tvInterval) clearInterval(tvInterval);
+                tvInterval = setInterval(rotateTVSlides, 15000);
+            });
+            
             loadData().then(() => renderTV());
         }
 
@@ -4057,12 +4287,15 @@
                 tvAllUpcoming.innerHTML = waitingJobs.map(job => {
                     const theme = getServiceTheme(job.category);
                     return `
-                        <div class="bg-white border-l-4 ${theme.border} rounded-xl p-3 flex flex-col justify-center min-h-[72px] relative shadow-sm hover:scale-[1.01] transition-transform duration-200">
-                            <span class="text-xl font-black uppercase italic text-gray-900 tracking-tighter mb-0.5 text-left">${job.plate}</span>
-                            <span class="text-[9px] font-bold uppercase tracking-widest text-gray-500 text-left">${job.vehicle} | <span class="${theme.text}">${job.category}</span></span>
+                        <div class="bg-white border-l-4 ${theme.border} rounded-xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:scale-[1.01] transition-transform duration-200">
+                            <div class="flex items-center gap-3">
+                                <span class="text-lg font-black uppercase italic text-gray-900 tracking-tighter">${job.plate}</span>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">${job.vehicle}</span>
+                            </div>
+                            <span class="${theme.text} font-extrabold text-[10px] uppercase tracking-widest">${job.category}</span>
                         </div>
                     `;
-                }).join('') || `<div class="col-span-full text-center py-8 text-blue-400/70 font-black uppercase italic text-sm tracking-widest">No Upcoming Vehicles</div>`;
+                }).join('') || `<div class="w-full text-center py-8 text-blue-400/70 font-black uppercase italic text-sm tracking-widest">No Upcoming Vehicles</div>`;
             }
 
             // Render Slide 2 Released List
@@ -4071,14 +4304,16 @@
             if (tvAllReleasedCount) tvAllReleasedCount.innerText = releasedAll.length;
             if (tvAllReleased) {
                 tvAllReleased.innerHTML = releasedAll.map(job => `
-                    <div class="bg-white border-t-4 border-green-500 rounded-xl p-2.5 flex flex-col justify-center items-center h-20 relative shadow-sm hover:scale-[1.01] transition-transform duration-200">
-                        <div class="absolute top-1.5 right-1.5 ${job.status === 'Released' ? 'bg-gray-200 text-gray-600' : 'bg-green-100 text-green-800'} font-extrabold text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded">
-                            ${job.status === 'Released' ? 'Released' : 'Ready'}
+                    <div class="bg-white border-l-4 border-green-500 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:scale-[1.01] transition-transform duration-200">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg font-black uppercase italic text-gray-900 tracking-tighter">${job.plate}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">${job.vehicle} | <span class="text-green-600 font-extrabold">${job.category}</span></span>
                         </div>
-                        <span class="text-xl font-black uppercase italic text-green-700 tracking-tighter mb-0.5 text-center">${job.plate}</span>
-                        <span class="text-[9px] font-bold uppercase tracking-widest text-green-600 text-center">${job.vehicle} | ${job.category}</span>
+                        <span class="${job.status === 'Released' ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-800'} font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded">
+                            ${job.status === 'Released' ? 'Released' : 'Ready'}
+                        </span>
                     </div>
-                `).join('') || `<div class="col-span-full text-center py-8 text-green-500/60 font-black uppercase italic text-sm tracking-widest">Waiting for Completed Jobs</div>`;
+                `).join('') || `<div class="w-full text-center py-8 text-green-500/60 font-black uppercase italic text-sm tracking-widest">Waiting for Completed Jobs</div>`;
             }
 
             // Render Slide 2 Carry Over List
@@ -4087,12 +4322,14 @@
             if (tvAllCarryCount) tvAllCarryCount.innerText = carryOverAll.length;
             if (tvAllCarry) {
                 tvAllCarry.innerHTML = carryOverAll.map(job => `
-                    <div class="bg-white border-t-4 border-orange-500 rounded-2xl p-3 flex flex-col justify-center items-center h-24 relative shadow-sm hover:scale-[1.01] transition-transform duration-200">
-                        <div class="absolute top-2 right-2 bg-orange-100 text-orange-800 font-extrabold text-[8px] uppercase tracking-wider px-2 py-0.5 rounded">Carry Over</div>
-                        <span class="text-2xl font-black uppercase italic text-orange-800 tracking-tighter mb-0.5 text-center">${job.plate}</span>
-                        <span class="text-[9px] font-bold uppercase tracking-widest text-orange-600 text-center">${job.vehicle} | ${job.category}</span>
+                    <div class="bg-white border-l-4 border-orange-500 rounded-xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:scale-[1.01] transition-transform duration-200">
+                        <div class="flex items-center gap-3">
+                            <span class="text-lg font-black uppercase italic text-gray-900 tracking-tighter">${job.plate}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500">${job.vehicle} | <span class="text-orange-600 font-extrabold">${job.category}</span></span>
+                        </div>
+                        <span class="bg-orange-100 text-orange-800 font-extrabold text-[9px] uppercase tracking-wider px-2 py-0.5 rounded">Carry Over</span>
                     </div>
-                `).join('') || `<div class="col-span-full text-center py-8 text-orange-500/60 font-black uppercase italic text-sm tracking-widest">No Carry-Overs</div>`;
+                `).join('') || `<div class="w-full text-center py-8 text-orange-500/60 font-black uppercase italic text-sm tracking-widest">No Carry-Overs</div>`;
             }
 
             // GRS Active Bays slide (tv-slide-1) rendering (Lifts 1-4)
@@ -4104,24 +4341,30 @@
                     if (job) {
                         const theme = getServiceTheme(job.category);
                         liftsHTML += `
-                            <div class="bg-white border-2 ${theme.border} rounded-2xl p-6 flex flex-col justify-center items-center h-48 relative shadow-lg animate-fade-in">
-                                <div class="absolute top-4 right-4 ${theme.bgBadge} text-white font-extrabold text-[11px] uppercase tracking-wider px-3 py-1 rounded flex items-center gap-1.5">
-                                    <i data-lucide="wrench" class="w-3.5 h-3.5"></i> Lift 0${i} - IN USE
+                            <div class="bg-white border-2 ${theme.border} rounded-2xl p-4 flex flex-col justify-between items-center h-40 relative shadow-md animate-fade-in">
+                                <div class="flex flex-col items-center gap-1 mt-1">
+                                    <span class="text-xs font-bold uppercase tracking-widest text-gray-400">LIFT-0${i}</span>
+                                    <span class="${theme.bgBadge} text-white font-extrabold text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded-full">IN SERVICE</span>
                                 </div>
-                                <span class="text-5xl font-black uppercase italic text-gray-900 tracking-tighter mb-2 text-center">${job.plate}</span>
-                                <span class="text-xs font-bold uppercase tracking-widest text-gray-500 text-center">${job.vehicle} | <span class="${theme.text}">${job.category}</span></span>
+                                <span class="text-3xl font-black uppercase italic text-gray-900 tracking-tighter text-center">${job.plate}</span>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 text-center mb-1">${job.vehicle} | <span class="${theme.text}">${job.category}</span></span>
                             </div>`;
                     } else {
                         liftsHTML += `
-                            <div class="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-6 flex flex-col justify-center items-center h-48 relative shadow-sm">
-                                <div class="absolute top-4 right-4 bg-gray-200 text-gray-500 font-extrabold text-[11px] uppercase tracking-wider px-3 py-1 rounded">Lift 0${i}</div>
-                                <span class="text-4xl font-extrabold uppercase italic text-gray-400 tracking-wider text-center">Available</span>
+                            <div class="bg-gray-50 border border-dashed border-gray-200 rounded-2xl p-4 flex flex-col justify-between items-center h-40 relative shadow-sm">
+                                <div class="flex flex-col items-center gap-1 mt-1">
+                                    <span class="text-xs font-bold uppercase tracking-widest text-gray-400">LIFT-0${i}</span>
+                                    <span class="bg-gray-200 text-gray-500 font-extrabold text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded-full">AVAILABLE</span>
+                                </div>
+                                <span class="text-2xl font-extrabold uppercase italic text-gray-400 tracking-wider text-center">EMPTY</span>
+                                <div class="h-4"></div>
                             </div>`;
                     }
                 }
                 tvGRS.innerHTML = liftsHTML;
             }
             lucide.createIcons();
+            startTVAutoScroll();
         }
 
         function updateClock() {
@@ -4129,6 +4372,123 @@
             const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
             if (document.getElementById('sys-clock')) document.getElementById('sys-clock').innerText = timeStr;
             if (document.getElementById('tv-clock-display')) document.getElementById('tv-clock-display').innerText = timeStr;
+            
+            // Update Date in TV Header
+            const dateDisplay = document.getElementById('tv-date-display');
+            if (dateDisplay) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateDisplay.innerText = now.toLocaleDateString('en-US', options);
+            }
+        }
+
+        let previousScrollHeights = {};
+        async function updateWeather() {
+            try {
+                // Marikina, Philippines Coordinates
+                const lat = 14.6507;
+                const lon = 121.1029;
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code`);
+                const data = await res.json();
+                
+                if (data && data.current) {
+                    const temp = Math.round(data.current.temperature_2m);
+                    const code = data.current.weather_code;
+                    
+                    // Map WMO Weather Codes to text & Lucide icons
+                    let weatherText = 'Clear';
+                    let iconName = 'sun';
+                    
+                    if (code === 0) { weatherText = 'Sunny'; iconName = 'sun'; }
+                    else if (code >= 1 && code <= 3) { weatherText = 'Partly Cloudy'; iconName = 'cloud-sun'; }
+                    else if (code >= 45 && code <= 48) { weatherText = 'Foggy'; iconName = 'cloud-fog'; }
+                    else if (code >= 51 && code <= 67) { weatherText = 'Rainy'; iconName = 'cloud-rain'; }
+                    else if (code >= 80 && code <= 82) { weatherText = 'Showers'; iconName = 'cloud-drizzle'; }
+                    else if (code >= 95 && code <= 99) { weatherText = 'Thunderstorm'; iconName = 'cloud-lightning'; }
+                    
+                    const tempEl = document.getElementById('tv-temp-display');
+                    const textEl = document.getElementById('tv-weather-text');
+                    const iconWrapEl = document.getElementById('tv-weather-icon-wrap');
+                    
+                    if (tempEl) tempEl.innerText = `${temp}°C`;
+                    if (textEl) textEl.innerText = weatherText;
+                    if (iconWrapEl) {
+                        iconWrapEl.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5 text-amber-400"></i>`;
+                        lucide.createIcons();
+                    }
+                }
+            } catch (err) {
+                console.warn('Weather fetch failed, using fallback:', err);
+                const hour = new Date().getHours();
+                const isDay = hour > 6 && hour < 18;
+                const fallbackTemp = isDay ? 32 : 26;
+                
+                if (document.getElementById('tv-temp-display')) document.getElementById('tv-temp-display').innerText = `${fallbackTemp}°C`;
+                if (document.getElementById('tv-weather-text')) document.getElementById('tv-weather-text').innerText = isDay ? 'Sunny' : 'Clear';
+                if (document.getElementById('tv-weather-icon-wrap')) {
+                    document.getElementById('tv-weather-icon-wrap').innerHTML = `<i data-lucide="${isDay ? 'sun' : 'moon'}" class="w-5 h-5 text-amber-400"></i>`;
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        function startTVAutoScroll() {
+            const containers = {
+                'released': document.getElementById('tv-all-released-list')?.parentElement,
+                'upcoming': document.getElementById('tv-all-upcoming-list')?.parentElement,
+                'carryover': document.getElementById('tv-all-carryover-list')?.parentElement
+            };
+
+            if (!window.tvScrollIntervals) {
+                window.tvScrollIntervals = {};
+            }
+
+            Object.keys(containers).forEach(key => {
+                const container = containers[key];
+                if (!container) return;
+
+                const currentHeight = container.scrollHeight;
+                const prevHeight = previousScrollHeights[key] || 0;
+
+                // Only re-initialize if contents height has changed to prevent scroll resets
+                if (currentHeight !== prevHeight) {
+                    previousScrollHeights[key] = currentHeight;
+
+                    if (window.tvScrollIntervals[key]) {
+                        clearInterval(window.tvScrollIntervals[key]);
+                    }
+
+                    const maxScroll = currentHeight - container.clientHeight;
+                    if (maxScroll <= 0) {
+                        container.scrollTop = 0;
+                        return; // Content fits completely
+                    }
+
+                    let direction = 1; // 1 = down, -1 = up
+                    let delayCycles = 0;
+
+                    window.tvScrollIntervals[key] = setInterval(() => {
+                        const maxScrollNow = container.scrollHeight - container.clientHeight;
+                        if (maxScrollNow <= 0) return;
+
+                        const atBottom = container.scrollTop >= maxScrollNow - 1;
+                        const atTop = container.scrollTop === 0;
+
+                        if ((atBottom && direction === 1) || (atTop && direction === -1)) {
+                            delayCycles++;
+                            if (delayCycles < 30) return; // Pause for 3 seconds (30 * 100ms)
+                            
+                            direction = direction === 1 ? -1 : 1;
+                            delayCycles = 0;
+                        }
+
+                        if (direction === 1) {
+                            container.scrollTop += 1.5; // Smooth scroll down
+                        } else {
+                            container.scrollTop -= 2.5; // Fast scroll back up
+                        }
+                    }, 100);
+                }
+            });
         }
 
         async function loadData() {
@@ -4137,7 +4497,7 @@
                 const isTVMode = urlParams.get('mode') === 'tv';
                 const jobsUrl = isTVMode ? '/api/jobs?monitor=true' : '/api/jobs';
                 allJobs = await apiRequest(jobsUrl);
-                if (currentUserRole === 'owner') {
+                if (currentUserRole === 'owner' || currentUserRole === 'admin') {
                     staffAccounts = await apiRequest('/api/auth/staff');
                 }
             } catch (err) {
@@ -4455,6 +4815,7 @@
                 }
 
                 currentUserName = res.name;
+                currentUserEmail = res.email || 'user@hontech.com';
                 handleLogin(res.role);
                 showSystemToast('Logged in via Google Sandbox.', 'success', 'Google Authenticated');
             } catch (err) {
@@ -4505,6 +4866,7 @@
                 });
 
                 currentUserName = user.name;
+                currentUserEmail = user.email || 'user@hontech.com';
                 handleLogin(user.role);
 
                 // Reset Login Form views
