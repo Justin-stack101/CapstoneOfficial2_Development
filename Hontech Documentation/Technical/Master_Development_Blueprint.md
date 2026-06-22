@@ -11,6 +11,7 @@ This document consolidates all previous roadmaps and outlines the strategic path
 - [x] **Developer Mailbox Simulator:** Built a local UI modal to intercept and view system emails (like OTPs) without needing a real Gmail account connected.
 - [x] **Role & UI Polish:** Deprecated the standalone Technician role, merging all status updates, lift assignments, evaluations, and goal status triggers into the Service Advisor workflow. Added segregated SA tables (My Active Jobs vs Unassigned / Other Advisor Jobs) with dynamic claiming.
 - [x] **Owner Dashboard Enhancements:** Added PMS Goal Success calculations, Success/Failure counters, and record log filter controls.
+- [x] **Strict Formats & Role Restrictions:** Enforced 24-hour time formatting universally. Restricted Periodic Record Logs to Owner/Admin roles. Formatted contact numbers dynamically (09XX-XXX-XXXX). Revamped Assistant workflow for online bookings (Action remarks handling).
 - [x] **Group QA Testing:** Verified core layouts and workflows locally.
 
 **Remaining Immediate To-Dos:**
