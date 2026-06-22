@@ -28,7 +28,11 @@ const generateStubNumber = async () => {
 export const getJobs = async (req, res) => {
   try {
     let query = {};
-    if (req.query.all !== 'true' && req.query.monitor !== 'true') {
+    if (req.query.all === 'true') {
+      if (req.user.role !== 'owner' && req.user.role !== 'admin') {
+        return res.status(403).json({ message: 'Access forbidden. Only Owners and Admins can access historical records.' });
+      }
+    } else if (req.query.monitor !== 'true') {
       query.status = { $ne: 'Completed' };
     }
     const jobs = await Job.find(query).sort({ updatedAt: -1 });
@@ -204,12 +208,18 @@ export const setJobStatus = async (req, res) => {
       }
     }
 
+    const originalStatus = job.status;
     job.status = status;
 
     // Clear location if moving to non-working states
     if (status === 'Ready' || status === 'Released' || status === 'Completed' || status === 'Carry Over' || status === 'Waiting') {
       job.location = 'None';
       job.bayAssigned = null;
+    }
+
+    // Clear action/remarks when pushing booking to daily intakes
+    if (status === 'Waiting' && originalStatus === 'Pending') {
+      job.remarks = '';
     }
 
     // If online booking becomes Waiting/Active and has no claim stub yet, generate one

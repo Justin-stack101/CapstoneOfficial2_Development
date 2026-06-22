@@ -18,9 +18,9 @@ const seedStressData = async () => {
   await connectDB();
   
   try {
-    // Clear existing non-completed active jobs first to avoid clutter
-    await Job.deleteMany({ status: { $ne: 'Completed' } });
-    console.log('Cleared active jobs.');
+    // Clear all existing jobs to prevent unique ID constraint conflicts
+    await Job.deleteMany({});
+    console.log('Cleared all jobs.');
 
     const today = new Date().toISOString().split('T')[0];
 
