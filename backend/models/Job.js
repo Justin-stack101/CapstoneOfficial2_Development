@@ -39,6 +39,11 @@ const jobSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  laneType: {
+    type: String,
+    enum: ['Flexible (Ordinary)', 'Express Lane', 'Special Lane', ''],
+    default: ''
+  },
   dateReceived: {
     type: String, // Stored as YYYY-MM-DD for standard front-end formatting compatibility
     required: true

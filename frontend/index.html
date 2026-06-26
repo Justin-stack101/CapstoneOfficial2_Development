@@ -467,15 +467,15 @@
 
                         <!-- Standard User Links -->
                         <div class="px-3 py-2">
-                            <button onclick="alert('Navigate to Profile')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                            <button onclick="showSection('profile'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
                                 <i data-lucide="user-circle" class="w-4 h-4 text-gray-400"></i>
                                 My Profile
                             </button>
-                            <button onclick="alert('Navigate to Settings')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                            <button onclick="showSection('settings'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
                                 <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
                                 Account Settings
                             </button>
-                            <button onclick="alert('Open Support Center')" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                            <button onclick="showSection('support'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
                                 <i data-lucide="help-circle" class="w-4 h-4 text-gray-400"></i>
                                 Help & Support
                             </button>
@@ -854,23 +854,23 @@
                                     class="bg-white border border-gray-200 rounded-xl px-3 py-1.5 font-bold text-xs text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
                             <table class="w-full text-left border-collapse">
-                                <thead>
+                                <thead class="sticky top-0 z-10 bg-white">
                                     <tr
                                         class="bg-white border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
-                                        <th class="px-6 py-4">Date Recv</th>
-                                        <th class="px-6 py-4">Claim Stub</th>
-                                        <th class="px-6 py-4">Plate No.</th>
-                                        <th class="px-6 py-4">Vehicle Model</th>
-                                        <th class="px-6 py-4">Category</th>
-                                        <th class="px-6 py-4">Branch</th>
-                                        <th class="px-6 py-4">Source</th>
-                                        <th class="px-6 py-4">Arrival</th>
-                                        <th class="px-6 py-4">Departure</th>
-                                        <th class="px-6 py-4">Goal Remarks</th>
-                                        <th class="px-6 py-4">Handled By</th>
-                                        <th class="px-6 py-4">Remarks</th>
+                                        <th class="px-6 py-4 bg-white">Date Recv</th>
+                                        <th class="px-6 py-4 bg-white">Claim Stub</th>
+                                        <th class="px-6 py-4 bg-white">Plate No.</th>
+                                        <th class="px-6 py-4 bg-white">Vehicle Model</th>
+                                        <th class="px-6 py-4 bg-white">Category</th>
+                                        <th class="px-6 py-4 bg-white">Branch</th>
+                                        <th class="px-6 py-4 bg-white">Source</th>
+                                        <th class="px-6 py-4 bg-white">Arrival</th>
+                                        <th class="px-6 py-4 bg-white">Departure</th>
+                                        <th class="px-6 py-4 bg-white">Goal Remarks</th>
+                                        <th class="px-6 py-4 bg-white">Handled By</th>
+                                        <th class="px-6 py-4 bg-white">Remarks</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-analytics-body"
@@ -958,16 +958,16 @@
                             </div>
                         </div>
 
-                        <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
+                        <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
                             <table class="w-full text-left whitespace-nowrap min-w-[700px]">
-                                <thead>
-                                    <tr>
-                                        <th>Staff Name</th>
-                                        <th>Role / Access</th>
-                                        <th>Email (Login)</th>
-                                        <th>Status</th>
-                                        <th>Password</th>
-                                        <th class="text-right">Action</th>
+                                <thead class="sticky top-0 z-10 bg-white">
+                                    <tr class="bg-white border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
+                                        <th class="px-6 py-4 bg-white">Staff Name</th>
+                                        <th class="px-6 py-4 bg-white">Role / Access</th>
+                                        <th class="px-6 py-4 bg-white">Email (Login)</th>
+                                        <th class="px-6 py-4 bg-white">Status</th>
+                                        <th class="px-6 py-4 bg-white">Password</th>
+                                        <th class="px-6 py-4 text-right bg-white">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-staff-accounts"></tbody>
@@ -1063,10 +1063,9 @@
                                     class="w-full bg-gray-100 border border-gray-200 rounded-xl px-3.5 py-2.5 font-mono font-bold text-gray-500 text-xs">
                             </div>
                         </div>
-
                         <!-- Booking Specific (Assistant Role) -->
                         <div id="div-booking-fields"
-                            class="md:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-4 hidden border-t border-gray-100 pt-4 mt-1">
+                            class="md:col-span-4 grid grid-cols-1 md:grid-cols-4 gap-4 hidden border-t border-gray-100 pt-4 mt-1">
                             <div class="md:col-span-1">
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Appt
@@ -1081,6 +1080,16 @@
                                 <input type="time" id="intake-appt-time"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
                             </div>
+                            <div class="md:col-span-1">
+                                <label
+                                    class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Type of Lane</label>
+                                <select id="intake-lane-type"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition cursor-pointer">
+                                    <option value="Flexible (Ordinary)">Flexible (Ordinary)</option>
+                                    <option value="Express Lane">Express Lane</option>
+                                    <option value="Special Lane">Special Lane</option>
+                                </select>
+                            </div>
                             <div class="md:col-span-1 flex items-center mt-5">
                                 <label
                                     class="flex items-center gap-3 cursor-pointer py-2 px-3.5 border border-gray-200 rounded-xl w-full bg-gray-50 hover:bg-gray-100 transition">
@@ -1090,11 +1099,11 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="md:col-span-4">
+                        
+                        <!-- Concerns (Walk-in only) -->
+                        <div id="div-concern-field" class="md:col-span-4 hidden mt-4">
                             <label
-                                class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-1 block">Specific
-                                Concerns / Notes</label>
+                                class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-1 block">Specific Concerns / Notes</label>
                             <textarea id="intake-concern" placeholder="Describe the vehicle issue..."
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs h-16 text-gray-900 transition resize-none"></textarea>
                         </div>
@@ -1124,18 +1133,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
+                    <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
                         <table class="w-full text-left whitespace-nowrap min-w-[750px]">
-                            <thead>
-                                <tr>
-                                    <th>Customer Name</th>
-                                    <th>Plate No.</th>
-                                    <th>Model</th>
-                                    <th>Appointment (Date, Time)</th>
-                                    <th>Parts</th>
-                                    <th>Confirmed</th>
-                                    <th>Action to be Done</th>
-                                    <th class="text-right">Action</th>
+                            <thead class="sticky top-0 z-10 bg-gray-50">
+                                <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
+                                    <th class="px-3 py-3.5 bg-gray-50">Customer Name</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Plate No.</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Model</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Lane Type</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Appointment (Date, Time)</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Parts</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Confirmed</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Action to be Done</th>
+                                    <th class="px-3 py-3.5 text-right bg-gray-50">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="table-pending-express"></tbody>
@@ -1207,18 +1217,18 @@
                                 requiring extended stays</p>
                         </div>
                     </div>
-                    <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
+                    <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
                         <table class="w-full text-left whitespace-nowrap min-w-[750px]">
-                            <thead>
+                            <thead class="sticky top-0 z-10 bg-gray-50">
                                 <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
-                                    <th class="px-3 py-3.5">Plate No.</th>
-                                    <th class="px-3 py-3.5">Model</th>
-                                    <th class="px-3 py-3.5">Date (Received, Promised)</th>
-                                    <th class="px-3 py-3.5">Parts</th>
-                                    <th class="px-3 py-3.5">Service Advisor</th>
-                                    <th class="px-3 py-3.5">Evaluation</th>
-                                    <th class="px-3 py-3.5">Remarks / Reasons</th>
-                                    <th class="px-3 py-3.5 text-right w-48">Action</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Plate No.</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Model</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Date (Received, Promised)</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Parts</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Service Advisor</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Evaluation</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Remarks / Reasons</th>
+                                    <th class="px-3 py-3.5 text-right w-48 bg-gray-55">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="table-carry-over"></tbody>
@@ -1261,26 +1271,65 @@
                                 <option value="Branch B">Branch B</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Handled By (SA)</label>
+                            <select id="periodic-search-sa" onchange="applyPeriodicFilters()" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 font-bold text-xs text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
+                                <option value="all">All SAs</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Service Status</label>
+                            <select id="periodic-search-status" onchange="applyPeriodicFilters()" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 font-bold text-xs text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
+                                <option value="all">All Statuses</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Ready">Ready</option>
+                                <option value="Carry Over">Carry Over</option>
+                                <option value="Released">Released</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Goal Remarks</label>
+                            <select id="periodic-search-goal" onchange="applyPeriodicFilters()" class="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 font-bold text-xs text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
+                                <option value="all">All Goals</option>
+                                <option value="Successful">Successful</option>
+                                <option value="Failed">Failed</option>
+                                <option value="N/A">N/A</option>
+                            </select>
+                        </div>
+                        <div>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">Start Date</label>
+                                    <input type="date" id="periodic-search-start-date" onchange="applyPeriodicFilters()" class="w-full bg-white border border-gray-200 rounded-xl px-2 py-2 font-bold text-[11px] text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
+                                </div>
+                                <div>
+                                    <label class="block text-[9px] text-gray-500 font-bold uppercase tracking-wider mb-1">End Date</label>
+                                    <input type="date" id="periodic-search-end-date" onchange="applyPeriodicFilters()" class="w-full bg-white border border-gray-200 rounded-xl px-2 py-2 font-bold text-[11px] text-gray-900 outline-none focus:border-red-650 transition cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Table -->
                     <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
                         <table class="w-full text-left border-collapse min-w-[1000px]">
-                            <thead>
+                            <thead class="sticky top-0 z-10 bg-gray-50">
                                 <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
-                                    <th class="px-3 py-3.5">Date Recv</th>
-                                    <th class="px-3 py-3.5">Claim Stub</th>
-                                    <th class="px-3 py-3.5">Plate No.</th>
-                                    <th class="px-3 py-3.5">Customer Name</th>
-                                    <th class="px-3 py-3.5">Contact No.</th>
-                                    <th class="px-3 py-3.5">Vehicle Model</th>
-                                    <th class="px-3 py-3.5">Category</th>
-                                    <th class="px-3 py-3.5">Channel</th>
-                                    <th class="px-3 py-3.5">Branch</th>
-                                    <th class="px-3 py-3.5">SLA (Goal)</th>
-                                    <th class="px-3 py-3.5">Handled By</th>
-                                    <th class="px-3 py-3.5">Status</th>
-                                    <th class="px-3 py-3.5">Remarks / Evaluation</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Date Recv</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Claim Stub</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Plate No.</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Customer Name</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Contact No.</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Vehicle Model</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Category</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Channel</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Branch</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">SLA (Goal)</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Handled By</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Status</th>
+                                    <th class="px-3 py-3.5 bg-gray-50">Remarks / Evaluation</th>
                                 </tr>
                             </thead>
                             <tbody id="table-periodic-body" class="divide-y divide-gray-150 text-xs text-gray-700 font-semibold">
@@ -1621,6 +1670,261 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Account Settings Section -->
+            <div id="section-settings" class="section-content hidden fade-in space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Notification Settings -->
+                    <div class="bg-white border border-gray-200 p-6 md:p-8 rounded-2xl shadow-md space-y-6">
+                        <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                            <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                                <i data-lucide="bell" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900">Notifications</h3>
+                                <p class="text-[11px] text-gray-500 font-bold uppercase tracking-widest mt-1">Manage system alerts & emails</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
+                                <div>
+                                    <span class="font-bold text-xs text-gray-900 block">Intake Confirmations</span>
+                                    <span class="text-[10px] text-gray-500 font-bold">Email notification on new vehicle register</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
+                                <div>
+                                    <span class="font-bold text-xs text-gray-900 block">Queue Delay Alerts</span>
+                                    <span class="text-[10px] text-gray-500 font-bold">System warnings when service runs over-time</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"></div>
+                                </label>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-200">
+                                <div>
+                                    <span class="font-bold text-xs text-gray-900 block">Weekly Reports</span>
+                                    <span class="text-[10px] text-gray-500 font-bold">Receive automated digest in inbox</span>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-red-600"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Personalization -->
+                    <div class="bg-white border border-gray-200 p-6 md:p-8 rounded-2xl shadow-md space-y-6">
+                        <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                            <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                                <i data-lucide="palette" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900">Personalization</h3>
+                                <p class="text-[11px] text-gray-500 font-bold uppercase tracking-widest mt-1">Change look and UI behaviors</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Sidebar Style</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option>Expanded (Default)</option>
+                                    <option>Icons Only</option>
+                                    <option>Compact</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">System Clock Format</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option>12-Hour format (AM/PM)</option>
+                                    <option>24-Hour format (Military)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Interactive Map Layout</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option>Grid Cards View</option>
+                                    <option>List View</option>
+                                    <option>Kanban Board Status</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Session & Security Preferences -->
+                    <div class="bg-white border border-gray-200 p-6 md:p-8 rounded-2xl shadow-md space-y-6 lg:col-span-2">
+                        <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                            <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                                <i data-lucide="shield" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900">Security Preferences</h3>
+                                <p class="text-[11px] text-gray-500 font-bold uppercase tracking-widest mt-1">Configure active sessions & idle rules</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Automatic Logout Idle Time</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option>15 Minutes</option>
+                                    <option selected>30 Minutes</option>
+                                    <option>1 Hour</option>
+                                    <option>Never (Not Recommended)</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-3">
+                                <span class="text-[10px] text-gray-600 font-bold uppercase tracking-wider block">Logged In Devices</span>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-3">
+                                        <div class="flex items-center gap-3">
+                                            <i data-lucide="laptop" class="w-5 h-5 text-gray-400"></i>
+                                            <div>
+                                                <span class="font-bold text-xs text-gray-900 block">Windows PC · Chrome</span>
+                                                <span class="text-[9px] text-green-600 font-extrabold uppercase">Current Active Session</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center bg-gray-50 border border-gray-200 rounded-xl p-3">
+                                        <div class="flex items-center gap-3">
+                                            <i data-lucide="smartphone" class="w-5 h-5 text-gray-400"></i>
+                                            <div>
+                                                <span class="font-bold text-xs text-gray-900 block">iPhone 14 · Safari</span>
+                                                <span class="text-[9px] text-gray-500 font-bold">Last active: 2 hours ago</span>
+                                            </div>
+                                        </div>
+                                        <button onclick="showSystemToast('Logged out device successfully!', 'success', 'Session Revoked')" class="text-[10px] font-black uppercase text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 rounded-lg px-2.5 py-1">Terminate</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-gray-100 pt-6 flex justify-end">
+                            <button onclick="showSystemToast('Mock Settings saved successfully (Preview only).', 'success', 'Settings Saved')" class="bg-gray-900 hover:bg-black text-white font-black uppercase text-xs tracking-wider px-6 py-3 rounded-xl transition shadow-md">
+                                Save Settings Mock
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Help & Support Section -->
+            <div id="section-support" class="section-content hidden fade-in space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+                    <!-- FAQ Section -->
+                    <div class="bg-white border border-gray-200 p-6 md:p-8 rounded-2xl shadow-md space-y-6 lg:col-span-2">
+                        <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                            <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                                <i data-lucide="help-circle" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900">Knowledge Base & FAQ</h3>
+                                <p class="text-[11px] text-gray-500 font-bold uppercase tracking-widest mt-1">Frequently asked questions and guides</p>
+                            </div>
+                        </div>
+
+                        <!-- Search Bar -->
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-4 top-3 text-gray-400 w-4 h-4"></i>
+                            <input type="text" placeholder="Search for questions or keywords..." class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-12 pr-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                        </div>
+
+                        <!-- FAQ Accordion -->
+                        <div class="space-y-3">
+                            <details class="group bg-gray-50 border border-gray-200 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                                <summary class="flex justify-between items-center cursor-pointer select-none">
+                                    <span class="font-bold text-xs text-gray-900">How do I add a new vehicle to the Queue?</span>
+                                    <span class="transition duration-300 group-open:rotate-180">
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                                    </span>
+                                </summary>
+                                <p class="mt-3 text-xs text-gray-600 font-semibold leading-relaxed border-t border-gray-200 pt-3">
+                                    Go to the "Intake" view in the navigation, fill in the customer name, license plate, vehicle brand/model, and select the service. Once submitted, it automatically appears in the live queue dashboard.
+                                </p>
+                            </details>
+
+                            <details class="group bg-gray-50 border border-gray-200 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                                <summary class="flex justify-between items-center cursor-pointer select-none">
+                                    <span class="font-bold text-xs text-gray-900">How can I download a PDF or Word report?</span>
+                                    <span class="transition duration-300 group-open:rotate-180">
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                                    </span>
+                                </summary>
+                                <p class="mt-3 text-xs text-gray-600 font-semibold leading-relaxed border-t border-gray-200 pt-3">
+                                    In the "Dashboard" overview screen, there are dedicated export buttons at the top right of the screen. Click on "PDF" or "Word" to instantly download the generated report documents.
+                                </p>
+                            </details>
+
+                            <details class="group bg-gray-50 border border-gray-200 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                                <summary class="flex justify-between items-center cursor-pointer select-none">
+                                    <span class="font-bold text-xs text-gray-900">How do I change color themes?</span>
+                                    <span class="transition duration-300 group-open:rotate-180">
+                                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                                    </span>
+                                </summary>
+                                <p class="mt-3 text-xs text-gray-600 font-semibold leading-relaxed border-t border-gray-200 pt-3">
+                                    Click your user profile avatar in the upper right header to expand the user dropdown menu. Under "Switch Color Theme", click on the colored circles (Teal, Blue, Purple, Orange, Red) to change colors.
+                                </p>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Create Ticket Form -->
+                    <div class="bg-white border border-gray-200 p-6 md:p-8 rounded-2xl shadow-md space-y-6">
+                        <div class="flex items-center gap-4 border-b border-gray-100 pb-4">
+                            <div class="p-3 bg-red-50 text-red-600 rounded-xl">
+                                <i data-lucide="message-square" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black uppercase tracking-tight text-gray-900">Submit Ticket</h3>
+                                <p class="text-[11px] text-gray-500 font-bold uppercase tracking-widest mt-1">Get developer assistance</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Ticket Subject</label>
+                                <input type="text" placeholder="e.g. System slow on loading, UI bug" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Priority Level</label>
+                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option>Low Priority</option>
+                                    <option>Medium Priority</option>
+                                    <option>High Priority / Blocked</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">Problem Details</label>
+                                <textarea rows="4" placeholder="Briefly describe what happened..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition"></textarea>
+                            </div>
+
+                            <button onclick="showSystemToast('Support ticket mock submitted!', 'success', 'Ticket Submitted')" class="w-full bg-red-600 hover:bg-red-700 text-white font-black uppercase text-xs tracking-wider py-3 rounded-xl transition shadow-md shadow-red-600/20">
+                                Send Help Request
+                            </button>
                         </div>
                     </div>
 
@@ -2338,7 +2642,9 @@
                 'intake': currentUserRole === 'assistant' ? 'Online Appointments' : 'Walk-In Registration',
                 'queue': 'Master Data Records',
                 'tv': 'Live Display Monitor',
-                'profile': 'My Security & Profile Settings'
+                'profile': 'My Security & Profile Settings',
+                'settings': 'Account Settings',
+                'support': 'Help & Support Center'
             };
             if (titles[id]) document.getElementById('view-title').innerText = titles[id];
 
@@ -2520,18 +2826,23 @@
                 catOther.value = '';
             }
 
+            const concernField = document.getElementById('div-concern-field');
+            if (concernField) concernField.classList.add('hidden');
+
             if (role === 'assistant') {
                 title.innerText = 'Online Booking Form';
                 subtitle.innerText = 'Log online inquiries to Booking Module.';
                 source.value = 'Online';
                 walkinFields.classList.add('hidden');
                 bookingFields.classList.remove('hidden');
+                if (concernField) concernField.classList.add('hidden');
             } else if (role === 'sa') {
                 title.innerText = 'Walk-In Form';
                 subtitle.innerText = 'Encode physical walk-in paperwork & assign Stub.';
                 source.value = 'Walk-in';
                 walkinFields.classList.remove('hidden');
                 bookingFields.classList.add('hidden');
+                if (concernField) concernField.classList.remove('hidden');
                 updateStubPreview();
             }
         }
@@ -2543,7 +2854,12 @@
             const name = document.getElementById('intake-name').value;
             const contact = document.getElementById('intake-contact').value;
             const vehicle = document.getElementById('intake-vehicle').value;
-            const concern = document.getElementById('intake-concern').value;
+            
+            let concern = '';
+            const concernEl = document.getElementById('intake-concern');
+            if (concernEl && source === 'Walk-in') {
+                concern = concernEl.value;
+            }
 
             let category = document.getElementById('intake-category').value;
             if (category === 'Others') {
@@ -2558,7 +2874,7 @@
 
             const isWalkin = source === 'Walk-in';
             let arrival = '';
-            let apptDate = '', apptTime = '', confirmed = false;
+            let apptDate = '', apptTime = '', confirmed = false, laneType = '';
 
             if (isWalkin) {
                 arrival = document.getElementById('intake-arrival').value || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
@@ -2566,6 +2882,7 @@
                 apptDate = document.getElementById('intake-appt-date').value;
                 apptTime = document.getElementById('intake-appt-time').value;
                 confirmed = document.getElementById('intake-confirmed').checked;
+                laneType = document.getElementById('intake-lane-type').value;
             }
 
             try {
@@ -2573,7 +2890,7 @@
                     method: 'POST',
                     body: {
                         source, dateReceived: date, plate, name, contact, category, vehicle, concern,
-                        arrival, apptDate, apptTime, confirmed
+                        arrival, apptDate, apptTime, confirmed, laneType
                     }
                 });
 
@@ -2591,6 +2908,9 @@
                     catOther.value = '';
                     catOther.classList.add('hidden');
                 }
+
+                const laneTypeSelect = document.getElementById('intake-lane-type');
+                if (laneTypeSelect) laneTypeSelect.value = 'Flexible (Ordinary)';
 
                 if (document.getElementById('intake-confirmed')) document.getElementById('intake-confirmed').checked = false;
 
@@ -2756,18 +3076,7 @@
             }
         }
 
-        async function claimJob(jobId) {
-            try {
-                await apiRequest(`/api/jobs/${jobId}/field`, {
-                    method: 'PATCH',
-                    body: { field: 'saName', value: currentUserName }
-                });
-                showSystemToast('Job claimed successfully.', 'success');
-                await loadData();
-            } catch (err) {
-                showSystemToast(err.message || 'Failed to claim job.', 'error');
-            }
-        }        function renderStaffTables() {
+        function renderStaffTables() {
             const isOwner = currentUserRole === 'owner';
             const isAdmin = currentUserRole === 'admin';
             const isAsst = currentUserRole === 'assistant';
@@ -2798,6 +3107,13 @@
                             </td>
                             <td><div class="font-black italic text-gray-700 text-lg">${job.plate}</div></td>
                             <td class="text-gray-500 text-sm">${job.vehicle}</td>
+                            <td>
+                                <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-xs w-36 border border-gray-200 bg-white cursor-pointer font-bold">
+                                    <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
+                                    <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
+                                    <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
+                                </select>
+                            </td>
                             <td>
                                 <div class="flex gap-2">
                                     <input type="date" value="${job.apptDate}" onchange="updateJobField('${job.id}', 'apptDate', this.value)" class="table-select text-sm w-32 border border-gray-200">
@@ -2830,6 +3146,9 @@
                             <td><div class="font-black italic text-gray-700 text-lg">${job.plate}</div></td>
                             <td class="text-gray-500 text-sm">${job.vehicle}</td>
                             <td>
+                                <span class="text-xs font-bold text-gray-700">${job.laneType || 'Flexible (Ordinary)'}</span>
+                            </td>
+                            <td>
                                 <span class="text-xs font-semibold text-gray-700">${job.apptDate || ''} @ ${formatTime12Hour(job.apptTime)}</span>
                             </td>
                             <td>
@@ -2847,7 +3166,7 @@
                         </tr>
                         `;
                     }
-                }).join('') || `<tr><td colspan="8" class="text-center py-8 text-gray-500 font-medium">No pending online bookings.</td></tr>`;
+                }).join('') || `<tr><td colspan="9" class="text-center py-8 text-gray-500 font-medium">No pending online bookings.</td></tr>`;
             }
 
             // DAILY INTAKES
@@ -2857,22 +3176,23 @@
 
                 const getTableHeaderHtml = () => {
                     return `
-                        <thead>
+                        <thead class="sticky top-0 z-10 bg-gray-50">
                             <tr class="bg-gray-50 border-b border-gray-200 text-gray-500 text-[10px] font-black uppercase tracking-widest">
-                                <th class="px-3 py-3.5">Claim Stub</th>
-                                <th class="px-3 py-3.5">Plate No.</th>
-                                <th class="px-3 py-3.5">Model & Category</th>
-                                <th class="px-3 py-3.5">Branch</th>
-                                <th class="px-3 py-3.5">Arrival</th>
-                                <th class="px-3 py-3.5">Departure</th>
-                                <th class="px-3 py-3.5">Parts</th>
-                                <th class="px-3 py-3.5">Evaluation / Diagnosis</th>
-                                <th class="px-3 py-3.5">GRS Recommendation</th>
-                                ${showGoal ? '<th class="px-3 py-3.5">SLA Status (2h)</th>' : ''}
-                                <th class="px-3 py-3.5">Status</th>
-                                <th class="px-3 py-3.5">Location</th>
-                                <th class="px-3 py-3.5">Remarks / Reasons</th>
-                                <th class="px-3 py-3.5 text-right w-44">Action</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Claim Stub</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Plate No.</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Model & Category</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Branch</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Source</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Arrival</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Departure</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Parts</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Evaluation / Diagnosis</th>
+                                <th class="px-3 py-3.5 bg-gray-50">GRS Recommendation</th>
+                                ${showGoal ? '<th class="px-3 py-3.5 bg-gray-50">SLA Status (2h)</th>' : ''}
+                                <th class="px-3 py-3.5 bg-gray-50">Status</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Location</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Remarks / Reasons</th>
+                                <th class="px-3 py-3.5 text-right w-44 bg-gray-50">Action</th>
                             </tr>
                         </thead>
                     `;
@@ -2880,14 +3200,9 @@
 
                 const renderJobRows = (jobsList) => {
                     return jobsList.map(job => {
-                        const isEditable = isSA && job.saName === currentUserName;
-                        const isUnassigned = !job.saName || job.saName.trim() === '';
+                        const isEditable = isSA;
+                        const canEditArrival = (isSA || isAsst) && job.source === 'Online';
                         
-                        let claimBtn = '';
-                        if (isSA && !isEditable) {
-                            claimBtn = `<button onclick="claimJob('${job.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded text-[10px] font-black uppercase transition shadow-sm flex items-center gap-1"><i data-lucide="user-check" class="w-3.5 h-3.5"></i> Claim / Take Over</button>`;
-                        }
-
                         // Re-evaluate occupied lifts for this specific row excluding current job
                         const rowOccupiedLifts = {};
                         allJobs.forEach(j => {
@@ -2907,15 +3222,29 @@
                             <!-- Model & Category -->
                             <td class="px-3 py-4">
                                 <div class="font-bold text-gray-900">${job.vehicle}</div>
-                                <div class="text-[10px] text-gray-500 font-bold uppercase">${job.category} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
+                                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">${job.category} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
+                                ${isEditable ? `
+                                <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-[10px] font-bold uppercase w-36 border border-gray-200 bg-white cursor-pointer block mt-1">
+                                    <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
+                                    <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
+                                    <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
+                                </select>
+                                ` : `
+                                <div class="text-[10px] text-red-600 font-bold uppercase mt-1">Lane: ${job.laneType || 'Flexible (Ordinary)'}</div>
+                                `}
                             </td>
                             
                             <!-- Branch -->
                             <td class="px-3 py-4"><span class="text-xs font-semibold text-gray-700">${job.branch || 'Branch A'}</span></td>
                             
+                            <!-- Source -->
+                            <td class="px-3 py-4">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${job.source === 'Online' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">${job.source || 'Walk-in'}</span>
+                            </td>
+
                             <!-- Arrival -->
                             <td class="px-3 py-4">
-                                ${isEditable ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
+                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
                             </td>
                             
                             <!-- Departure -->
@@ -3031,12 +3360,13 @@
                             <!-- Action -->
                             <td class="px-3 py-4 text-right">
                                 <div class="flex items-center gap-2 justify-end">
-                                    ${claimBtn}
                                     ${job.status === 'Released' && isEditable ? `
                                         <button onclick="completeRelease('${job.id}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-black uppercase transition shadow-sm whitespace-nowrap flex items-center gap-1" title="Finalize and remove from list">
                                             <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Released
                                         </button>
-                                    ` : ''}
+                                    ` : isEditable ? `
+                                        <input type="text" value="${job.concern || ''}" placeholder="Edit Concerns/Notes..." onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white text-left text-xs">
+                                    ` : `<span class="text-xs font-semibold text-gray-600">${job.concern || '-'}</span>`}
                                 </div>
                             </td>
                         </tr>
@@ -3045,16 +3375,15 @@
                 };
 
                 const dailyIntakesEl = document.getElementById('container-daily-intakes');
-                if (isSA) {
+                if (dailyIntakesEl) {
                     let filteredActiveJobs = [...activeJobs];
-                    if (saIntakeFilter !== 'All') {
+                    if (isSA && saIntakeFilter !== 'All') {
                         filteredActiveJobs = filteredActiveJobs.filter(j => j.source === saIntakeFilter);
                     }
-                    const myJobs = filteredActiveJobs.filter(j => j.saName === currentUserName);
-                    const otherJobs = filteredActiveJobs.filter(j => j.saName !== currentUserName);
 
                     dailyIntakesEl.innerHTML = `
                         <div class="space-y-6">
+                            ${isSA ? `
                             <!-- Walk-in / Online Radio Filters -->
                             <div class="flex items-center gap-4 bg-gray-50 p-3 rounded-xl border border-gray-205 self-start">
                                 <span class="text-xs font-black uppercase text-gray-500 tracking-wider">Source Filter:</span>
@@ -3071,70 +3400,25 @@
                                     <span class="text-xs font-bold text-gray-700">Walk-In</span>
                                 </label>
                             </div>
+                            ` : ''}
 
-                            <!-- Section 1: My Active Jobs -->
-                            <div class="flex flex-col gap-3">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-red-50 rounded-lg text-red-600"><i data-lucide="user-check" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">My Active Jobs</h3>
-                                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Vehicles under your supervision</p>
-                                        </div>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 bg-red-50 rounded-lg text-red-600"><i data-lucide="list-todo" class="w-5 h-5"></i></div>
+                                    <div>
+                                        <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table</h3>
+                                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active Vehicles in Workshop</p>
                                     </div>
-                                    <span class="text-[10px] font-black text-red-600 uppercase bg-red-50 border border-red-100 px-3 py-1 rounded-full">${myJobs.length} Assigned</span>
-                                </div>
-                                <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
-                                    <table class="w-full text-left whitespace-nowrap min-w-[800px]">
-                                        ${getTableHeaderHtml()}
-                                        <tbody>
-                                            ${renderJobRows(myJobs) || `<tr><td colspan="${showGoal ? 14 : 13}" class="text-center py-8 text-gray-500 font-medium">No jobs assigned to you yet. Claim a job from below or create a walk-in!</td></tr>`}
-                                        </tbody>
-                                    </table>
                                 </div>
                             </div>
-                            
-                            <!-- Section 2: Other Advisor / Unassigned Jobs -->
-                            <div class="flex flex-col gap-3 border-t border-gray-100 pt-6">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="p-2 bg-gray-50 rounded-lg text-gray-600"><i data-lucide="users" class="w-5 h-5"></i></div>
-                                        <div>
-                                            <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Unassigned & Other Advisor Jobs</h3>
-                                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Other active workshop vehicles</p>
-                                        </div>
-                                    </div>
-                                    <span class="text-[10px] font-black text-gray-500 uppercase bg-gray-100 border border-gray-200 px-3 py-1 rounded-full">${otherJobs.length} Active</span>
-                                </div>
-                                <div class="overflow-x-auto max-h-[300px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
-                                    <table class="w-full text-left whitespace-nowrap min-w-[800px]">
-                                        ${getTableHeaderHtml()}
-                                        <tbody>
-                                            ${renderJobRows(otherJobs) || `<tr><td colspan="${showGoal ? 14 : 13}" class="text-center py-8 text-gray-500 font-medium">No other active workshop vehicles.</td></tr>`}
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
+                                <table class="w-full text-left whitespace-nowrap min-w-[800px]">
+                                    ${getTableHeaderHtml()}
+                                    <tbody>
+                                        ${renderJobRows(isSA ? filteredActiveJobs : activeJobs) || `<tr><td colspan="${showGoal ? 15 : 14}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    `;
-                } else {
-                    dailyIntakesEl.innerHTML = `
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-red-50 rounded-lg text-red-600"><i data-lucide="list-todo" class="w-5 h-5"></i></div>
-                                <div>
-                                    <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table</h3>
-                                    <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active Vehicles in Workshop</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
-                            <table class="w-full text-left whitespace-nowrap min-w-[800px]">
-                                ${getTableHeaderHtml()}
-                                <tbody>
-                                    ${renderJobRows(activeJobs) || `<tr><td colspan="${showGoal ? 14 : 13}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
-                                </tbody>
-                            </table>
                         </div>
                     `;
                 }
@@ -3149,7 +3433,7 @@
             if (document.getElementById('table-carry-over')) {
                 const carryOverJobs = allJobs.filter(j => j.status === 'Carry Over');
                 document.getElementById('table-carry-over').innerHTML = carryOverJobs.map(job => {
-                    const isEditable = isSA && job.saName === currentUserName;
+                    const isEditable = isSA;
                     
                     let actions = '';
                     if (isEditable) {
@@ -3157,13 +3441,7 @@
                             <div class="flex gap-1.5 justify-end">
                                 <button onclick="setJobStatus('${job.id}', 'Waiting')" class="bg-gray-100 text-gray-655 hover:bg-gray-200 px-2 py-1 rounded text-[10px] font-black uppercase transition whitespace-nowrap">Return Active</button>
                                 <button onclick="setJobStatus('${job.id}', 'Ready')" class="bg-green-600 text-white hover:bg-green-700 px-2 py-1 rounded text-[10px] font-black uppercase transition whitespace-nowrap">Ready (TV)</button>
-                                <button onclick="completeRelease('${job.id}')" class="bg-red-600 text-white hover:bg-red-750 px-2 py-1 rounded text-[10px] font-black uppercase transition whitespace-nowrap">Remove</button>
-                            </div>
-                        `;
-                    } else if (isSA) {
-                        actions = `
-                            <div class="flex justify-end">
-                                <button onclick="claimJob('${job.id}')" class="bg-blue-600 text-white hover:bg-blue-700 px-2 py-1 rounded text-[10px] font-black uppercase transition whitespace-nowrap">Claim / Take Over</button>
+                                <button onclick="completeRelease('${job.id}')" class="bg-red-650 text-white hover:bg-red-750 px-2 py-1 rounded text-[10px] font-black uppercase transition whitespace-nowrap">Remove</button>
                             </div>
                         `;
                     } else {
@@ -3221,6 +3499,11 @@
             const query = document.getElementById('periodic-search-query') ? document.getElementById('periodic-search-query').value.toLowerCase().trim() : '';
             const source = document.getElementById('periodic-search-source') ? document.getElementById('periodic-search-source').value : 'all';
             const branch = document.getElementById('periodic-search-branch') ? document.getElementById('periodic-search-branch').value : 'all';
+            const saFilter = document.getElementById('periodic-search-sa') ? document.getElementById('periodic-search-sa').value : 'all';
+            const statusFilter = document.getElementById('periodic-search-status') ? document.getElementById('periodic-search-status').value : 'all';
+            const goalFilter = document.getElementById('periodic-search-goal') ? document.getElementById('periodic-search-goal').value : 'all';
+            const startDateVal = document.getElementById('periodic-search-start-date') ? document.getElementById('periodic-search-start-date').value : '';
+            const endDateVal = document.getElementById('periodic-search-end-date') ? document.getElementById('periodic-search-end-date').value : '';
             
             let filtered = allJobs || [];
             
@@ -3229,6 +3512,15 @@
             }
             if (branch !== 'all') {
                 filtered = filtered.filter(j => j.branch === branch);
+            }
+            if (saFilter !== 'all') {
+                filtered = filtered.filter(j => j.saName === saFilter);
+            }
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(j => j.status === statusFilter);
+            }
+            if (goalFilter !== 'all') {
+                filtered = filtered.filter(j => j.goalStatus === goalFilter);
             }
             if (query) {
                 filtered = filtered.filter(j => 
@@ -3240,8 +3532,15 @@
                     (j.saName && j.saName.toLowerCase().includes(query)) ||
                     (j.category && j.category.toLowerCase().includes(query)) ||
                     (j.remarks && j.remarks.toLowerCase().includes(query)) ||
-                    (j.evaluation && j.evaluation.toLowerCase().includes(query))
+                    (j.evaluation && j.evaluation.toLowerCase().includes(query)) ||
+                    (j.laneType && j.laneType.toLowerCase().includes(query))
                 );
+            }
+            if (startDateVal) {
+                filtered = filtered.filter(j => j.dateReceived >= startDateVal);
+            }
+            if (endDateVal) {
+                filtered = filtered.filter(j => j.dateReceived <= endDateVal);
             }
             
             const tbody = document.getElementById('table-periodic-body');
@@ -3253,14 +3552,17 @@
                         <td class="px-3 py-4"><span class="font-black italic text-gray-900 text-sm">${job.plate}</span></td>
                         <td class="px-3 py-4">${job.name}</td>
                         <td class="px-3 py-4 font-mono">${formatPhoneNumber(job.contact)}</td>
-                        <td class="px-3 py-4">${job.vehicle}</td>
+                        <td class="px-3 py-4">
+                            <div>${job.vehicle}</div>
+                            ${job.laneType ? `<span class="inline-block text-[9px] font-black uppercase text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-100 mt-1">${job.laneType}</span>` : ''}
+                        </td>
                         <td class="px-3 py-4">
                             <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${job.category && job.category.toUpperCase().includes('PMS') ? 'bg-blue-50 text-blue-600 border border-blue-100' : job.category && job.category.toUpperCase().includes('GR') ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-green-50 text-green-600 border border-green-100'}">
                                 ${job.category}
                             </span>
                         </td>
                         <td class="px-3 py-4 text-xs font-bold text-gray-500 uppercase tracking-wider">${job.source}</td>
-                        <td class="px-3 py-4 text-xs font-semibold text-gray-650">${job.branch || 'Branch A'}</td>
+                        <td class="px-3 py-4 text-xs font-semibold text-gray-655">${job.branch || 'Branch A'}</td>
                         <td class="px-3 py-4">
                             <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${job.goalStatus === 'Successful' ? 'bg-green-50 text-green-700 border border-green-100' : job.goalStatus === 'Failed' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-gray-100 text-gray-700'}">
                                 ${job.goalStatus || 'N/A'}
@@ -4892,6 +5194,20 @@
             });
         }
 
+        function populatePeriodicSaFilter() {
+            const saFilterSelect = document.getElementById('periodic-search-sa');
+            if (saFilterSelect) {
+                const currentSaVal = saFilterSelect.value || 'all';
+                const saNames = Array.from(new Set((allJobs || []).map(j => j.saName).filter(name => name && name.trim() !== '')));
+                saFilterSelect.innerHTML = `<option value="all">All SAs</option>` + saNames.map(name => `<option value="${name}">${name}</option>`).join('');
+                if (saNames.includes(currentSaVal)) {
+                    saFilterSelect.value = currentSaVal;
+                } else {
+                    saFilterSelect.value = 'all';
+                }
+            }
+        }
+
         async function loadData() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -4901,6 +5217,7 @@
                 allJobs = await apiRequest(jobsUrl);
                 if (isOwnerOrAdmin) {
                     staffAccounts = await apiRequest('/api/auth/staff');
+                    populatePeriodicSaFilter();
                 }
             } catch (err) {
                 console.error('Failed to load operational data:', err);

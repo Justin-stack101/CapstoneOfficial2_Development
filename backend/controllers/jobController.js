@@ -43,7 +43,7 @@ export const getJobs = async (req, res) => {
 };
 
 export const createJob = async (req, res) => {
-  const { source, plate, name, contact, vehicle, category, concern, dateReceived, arrival, apptDate, apptTime, confirmed, branch } = req.body;
+  const { source, plate, name, contact, vehicle, category, concern, dateReceived, arrival, apptDate, apptTime, confirmed, branch, laneType } = req.body;
 
   try {
     if (!plate || !name || !vehicle || !category) {
@@ -86,7 +86,8 @@ export const createJob = async (req, res) => {
       status: initialStatus,
       branch: branch || 'Branch A',
       location: 'None',
-      saName: isWalkin && req.user ? req.user.name : ''
+      saName: isWalkin && req.user ? req.user.name : '',
+      laneType: laneType || ''
     });
 
     await newJob.save();
@@ -107,20 +108,17 @@ export const updateJobField = async (req, res) => {
     }
 
     // Role Security Partitioning Enforcement
-    if (req.user.role === 'owner' || req.user.role === 'admin') {
-      return res.status(403).json({ message: 'Access forbidden. Owners and Admins are read-only for operational records.' });
-    }
+    if (field === 'arrival' && job.source === 'Online') {
+      if (req.user.role !== 'sa' && req.user.role !== 'assistant') {
+        return res.status(403).json({ message: 'Access forbidden. Only SAs and Assistants can edit arrival for online bookings.' });
+      }
+    } else {
+      if (req.user.role === 'owner' || req.user.role === 'admin') {
+        return res.status(403).json({ message: 'Access forbidden. Owners and Admins are read-only for operational records.' });
+      }
 
-    if (req.user.role === 'assistant' && job.status !== 'Pending') {
-      return res.status(403).json({ message: 'Access forbidden. Assistant is read-only for active workshop records.' });
-    }
-
-    if (req.user.role === 'sa') {
-      const isClaiming = field === 'saName' && value === req.user.name;
-      const isUnassigned = !job.saName || job.saName.trim() === '';
-      const isAssignedToSelf = job.saName === req.user.name;
-      if (!isAssignedToSelf && !isClaiming && !isUnassigned) {
-        return res.status(403).json({ message: 'Access forbidden. You can only modify jobs assigned to you.' });
+      if (req.user.role === 'assistant' && job.status !== 'Pending') {
+        return res.status(403).json({ message: 'Access forbidden. Assistant is read-only for active workshop records.' });
       }
     }
 
@@ -198,14 +196,6 @@ export const setJobStatus = async (req, res) => {
 
     if (req.user.role === 'assistant' && job.status !== 'Pending') {
       return res.status(403).json({ message: 'Access forbidden. Assistant is read-only for active workshop records.' });
-    }
-
-    if (req.user.role === 'sa') {
-      const isAssignedToSelf = job.saName === req.user.name;
-      const isUnassigned = !job.saName || job.saName.trim() === '';
-      if (!isAssignedToSelf && !isUnassigned) {
-        return res.status(403).json({ message: 'Access forbidden. You can only modify status on jobs assigned to you.' });
-      }
     }
 
     const originalStatus = job.status;
