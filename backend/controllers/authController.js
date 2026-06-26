@@ -7,7 +7,7 @@ import { sendEmail, generateSupercellEmailHtml } from '../config/emailUtils.js';
 const generateToken = (res, userId, role) => {
   const token = jwt.sign(
     { id: userId, role },
-    process.env.JWT_SECRET || 'supersecretjwtkey12345!',
+    process.env.JWT_SECRET,
     { expiresIn: '1d' }
   );
 
@@ -123,7 +123,7 @@ export const logout = async (req, res) => {
     const token = req.cookies.token;
     if (token) {
       try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey12345!');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         await User.findByIdAndUpdate(decoded.id, { isOnline: false });
       } catch (err) {
         // Ignore error

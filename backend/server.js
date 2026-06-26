@@ -32,11 +32,11 @@ await connectDB();
 const seedDatabase = async () => {
   try {
     const defaultUsers = [
-      { name: 'System Owner', role: 'owner', email: 'owner@hontech.com', password: 'owner123' },
-      { name: 'System Admin', role: 'admin', email: 'admin@hontech.com', password: 'admin123' },
-      { name: 'Jessica (Front Desk)', role: 'assistant', email: 'staff@hontech.com', password: 'staff123' },
-      { name: 'Mark (Advisor)', role: 'sa', email: 'sa@hontech.com', password: 'sa123' },
-      { name: 'Dave (Advisor)', role: 'sa', email: 'tech@hontech.com', password: 'tech123' }
+      { name: 'System Owner', role: 'owner', email: 'owner@hontech.com', password: process.env.OWNER_PASSWORD },
+      { name: 'System Admin', role: 'admin', email: 'admin@hontech.com', password: process.env.ADMIN_PASSWORD },
+      { name: 'Jessica (Front Desk)', role: 'assistant', email: 'staff@hontech.com', password: process.env.STAFF_PASSWORD },
+      { name: 'Mark (Advisor)', role: 'sa', email: 'sa@hontech.com', password: process.env.SA_PASSWORD },
+      { name: 'Dave (Advisor)', role: 'sa', email: 'tech@hontech.com', password: process.env.TECH_PASSWORD }
     ];
 
     for (const u of defaultUsers) {

@@ -9,7 +9,7 @@ export const authenticateUser = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'supersecretjwtkey12345!');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
     // Find the user to verify they still exist and are active
     const user = await User.findById(decoded.id).select('-password');
