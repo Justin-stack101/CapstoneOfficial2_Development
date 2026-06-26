@@ -162,6 +162,7 @@ export const getMe = async (req, res) => {
     name: req.user.name,
     email: req.user.email,
     role: req.user.role,
+    branch: req.user.branch || 'Branch A',
     backupEmail: req.user.backupEmail,
     mfaEnabled: req.user.mfaEnabled,
     googleLinked: !!req.user.googleId,
@@ -179,7 +180,7 @@ export const getStaff = async (req, res) => {
 };
 
 export const createStaff = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, branch } = req.body;
 
   try {
     if (!name || !email || !password || !role) {
@@ -195,7 +196,8 @@ export const createStaff = async (req, res) => {
       name,
       email,
       password,
-      role
+      role,
+      branch: branch || 'Branch A'
     });
 
     await newStaff.save();
@@ -204,7 +206,8 @@ export const createStaff = async (req, res) => {
       id: newStaff._id,
       name: newStaff.name,
       email: newStaff.email,
-      role: newStaff.role
+      role: newStaff.role,
+      branch: newStaff.branch
     });
   } catch (error) {
     res.status(500).json({ message: 'Error creating staff account.', error: error.message });
@@ -766,5 +769,35 @@ export const updateStaffRole = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error updating staff role.', error: error.message });
+  }
+};
+
+export const updateStaffBranch = async (req, res) => {
+  const { id } = req.params;
+  const { branch } = req.body;
+
+  try {
+    if (!branch) {
+      return res.status(400).json({ message: 'Branch is required.' });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'Staff member not found.' });
+    }
+
+    user.branch = branch;
+    await user.save();
+
+    res.status(200).json({
+      message: `Branch assignment for ${user.name} updated to ${branch} successfully.`,
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      branch: user.branch
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating staff branch.', error: error.message });
   }
 };

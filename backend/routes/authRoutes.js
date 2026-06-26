@@ -23,6 +23,7 @@ import {
   resetStaffPassword,
   toggleStaffActiveStatus,
   updateStaffRole,
+  updateStaffBranch,
   pingActiveSession
 } from '../controllers/authController.js';
 import { authenticateUser, requireRole } from '../middleware/auth.js';
@@ -81,5 +82,6 @@ router.delete('/staff/:id', authenticateUser, requireRole(['admin']), deleteStaf
 router.post('/staff/:id/reset-password', authenticateUser, requireRole(['admin']), resetStaffPassword);
 router.patch('/staff/:id/toggle-active', authenticateUser, requireRole(['admin']), toggleStaffActiveStatus);
 router.put('/staff/:id/role', authenticateUser, requireRole(['admin']), updateStaffRole);
+router.patch('/staff/:id/branch', authenticateUser, requireRole(['admin']), updateStaffBranch);
 
 export default router;

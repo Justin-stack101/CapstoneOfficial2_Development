@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
     enum: ['owner', 'admin', 'assistant', 'sa'],
     required: true
   },
+  branch: {
+    type: String,
+    default: 'Branch A'
+  },
   isActive: {
     type: Boolean,
     default: true

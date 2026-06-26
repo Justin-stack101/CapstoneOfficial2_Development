@@ -35,6 +35,12 @@ export const getJobs = async (req, res) => {
     } else if (req.query.monitor !== 'true') {
       query.status = { $ne: 'Completed' };
     }
+
+    // Branch partitioning security check
+    if (req.user.role !== 'owner' && req.user.role !== 'admin') {
+      query.branch = req.user.branch || 'Branch A';
+    }
+
     const jobs = await Job.find(query).sort({ updatedAt: -1 });
     res.status(200).json(jobs);
   } catch (error) {
@@ -84,7 +90,7 @@ export const createJob = async (req, res) => {
       confirmed: confirmed || false,
       claimStub,
       status: initialStatus,
-      branch: branch || 'Branch A',
+      branch: (req.user.role === 'owner' || req.user.role === 'admin') ? (branch || 'Branch A') : (req.user.branch || 'Branch A'),
       location: 'None',
       saName: isWalkin && req.user ? req.user.name : '',
       laneType: laneType || ''
@@ -105,6 +111,11 @@ export const updateJobField = async (req, res) => {
     const job = await Job.findOne({ id });
     if (!job) {
       return res.status(404).json({ message: 'Job not found.' });
+    }
+
+    // Branch Security Partitioning Enforcement
+    if (req.user.role !== 'owner' && req.user.role !== 'admin' && job.branch !== req.user.branch) {
+      return res.status(403).json({ message: 'Access forbidden. This vehicle belongs to another branch.' });
     }
 
     // Role Security Partitioning Enforcement
@@ -189,6 +200,11 @@ export const setJobStatus = async (req, res) => {
       return res.status(404).json({ message: 'Job not found.' });
     }
 
+    // Branch Security Partitioning Enforcement
+    if (req.user.role !== 'owner' && req.user.role !== 'admin' && job.branch !== req.user.branch) {
+      return res.status(403).json({ message: 'Access forbidden. This vehicle belongs to another branch.' });
+    }
+
     // Role Security Partitioning Enforcement
     if (req.user.role === 'owner' || req.user.role === 'admin') {
       return res.status(403).json({ message: 'Access forbidden. Owners and Admins are read-only for operational records.' });
@@ -265,6 +281,11 @@ export const deleteJob = async (req, res) => {
     const job = await Job.findOne({ id });
     if (!job) {
       return res.status(404).json({ message: 'Job record not found.' });
+    }
+
+    // Branch Security Partitioning Enforcement
+    if (req.user.role !== 'owner' && req.user.role !== 'admin' && job.branch !== req.user.branch) {
+      return res.status(403).json({ message: 'Access forbidden. This vehicle belongs to another branch.' });
     }
 
     if (req.user.role === 'assistant' && job.status !== 'Pending') {
