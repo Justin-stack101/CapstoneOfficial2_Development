@@ -636,7 +636,7 @@
                     </div>
 
                     <!-- Period Summary Cards Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <!-- Intakes Card -->
                         <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm text-center">
                             <div
@@ -699,20 +699,6 @@
                                 <span>Branch A: <strong id="branch-a-duration" class="text-gray-900 font-bold">0</strong></span>
                                 <span class="text-gray-300">|</span>
                                 <span>Branch B: <strong id="branch-b-duration" class="text-gray-900 font-bold">0</strong></span>
-                            </div>
-                        </div>
-                        <!-- Estimated Revenue Card -->
-                        <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm text-center">
-                            <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <i data-lucide="wallet" class="w-5 h-5"></i>
-                            </div>
-                            <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Est. Revenue</p>
-                            <h3 class="text-3xl font-black text-gray-900" id="analytic-metric-revenue">₱0</h3>
-                            <p class="text-[9px] text-amber-600 font-bold uppercase mt-1">Based on Completed Jobs</p>
-                            <div class="text-[10px] text-gray-500 font-semibold mt-3 border-t border-gray-100 pt-2.5 flex justify-around">
-                                <span>Branch A: <strong id="branch-a-revenue" class="text-gray-900 font-bold">₱0</strong></span>
-                                <span class="text-gray-300">|</span>
-                                <span>Branch B: <strong id="branch-b-revenue" class="text-gray-900 font-bold">₱0</strong></span>
                             </div>
                         </div>
                     </div>
@@ -815,7 +801,7 @@
                     </div>
 
                     <!-- Charts Grid Row 3: Multi-Branch Comparison -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
                         <!-- Branch Intake Comparison Chart -->
                         <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm flex flex-col">
                             <h4 class="text-xs font-black uppercase tracking-wider text-gray-700 mb-4 flex items-center gap-2">
@@ -832,15 +818,6 @@
                             </h4>
                             <div class="flex-1 min-h-[260px] max-h-[300px] relative">
                                 <canvas id="chart-branch-sla"></canvas>
-                            </div>
-                        </div>
-                        <!-- Branch Estimated Revenue Chart -->
-                        <div class="bg-white border border-gray-200 p-6 rounded-2xl shadow-sm flex flex-col">
-                            <h4 class="text-xs font-black uppercase tracking-wider text-amber-600 mb-4 flex items-center gap-2">
-                                <i data-lucide="wallet" class="w-4 h-4 text-amber-600"></i> Est. Revenue Comparison
-                            </h4>
-                            <div class="flex-1 min-h-[260px] max-h-[300px] relative">
-                                <canvas id="chart-branch-revenue"></canvas>
                             </div>
                         </div>
                     </div>
@@ -2518,8 +2495,7 @@
             category: null,
             channel: null,
             branchComp: null,
-            branchSla: null,
-            branchRev: null
+            branchSla: null
         };
 
         // Intercept API calls to support localized frontend-only demo
@@ -4349,14 +4325,7 @@
             document.getElementById('analytic-table-count').innerText = `${filtered.length} records`;
         }
 
-        function getSimulatedRevenue(category) {
-            const cat = (category || '').toUpperCase();
-            if (cat.includes('PMS') && cat.includes('GR')) return 8500;
-            if (cat.includes('PMS')) return 3500;
-            if (cat.includes('GR') || cat.includes('GENERAL REPAIR') || cat.includes('GRS')) return 5000;
-            if (cat.includes('CHECK-UP') || cat.includes('CHECKUP')) return 500;
-            return 1200; // default for others
-        }
+        // getSimulatedRevenue removed as no money/revenue metrics are used
 
         function renderAnalytics(jobs, scope, startStr, endStr) {
             const total = jobs.length;
@@ -4389,10 +4358,6 @@
             document.getElementById('analytic-metric-carryover').innerText = carryover;
             document.getElementById('analytic-metric-duration').innerText = durationText;
 
-            // Calculate Estimated Revenue
-            const revenueJobs = jobs.filter(j => j.status === 'Completed' || j.status === 'Released');
-            const totalRevenue = revenueJobs.reduce((acc, j) => acc + getSimulatedRevenue(j.category), 0);
-            document.getElementById('analytic-metric-revenue').innerText = `₱${totalRevenue.toLocaleString()}`;
 
             // Branch level metrics (computed from unfiltered analyticsJobs)
             const listForBranchCalc = analyticsJobs || [];
@@ -4434,13 +4399,6 @@
             document.getElementById('branch-a-duration').innerText = calcAvgDuration(timedA);
             document.getElementById('branch-b-duration').innerText = calcAvgDuration(timedB);
 
-            // Branch Revenue calculation (for comparative display cards)
-            const revenueJobsA = listForBranchCalc.filter(j => (j.status === 'Completed' || j.status === 'Released') && j.branch === 'Branch A');
-            const revenueJobsB = listForBranchCalc.filter(j => (j.status === 'Completed' || j.status === 'Released') && j.branch === 'Branch B');
-            const revenueA = revenueJobsA.reduce((acc, j) => acc + getSimulatedRevenue(j.category), 0);
-            const revenueB = revenueJobsB.reduce((acc, j) => acc + getSimulatedRevenue(j.category), 0);
-            document.getElementById('branch-a-revenue').innerText = `₱${revenueA.toLocaleString()}`;
-            document.getElementById('branch-b-revenue').innerText = `₱${revenueB.toLocaleString()}`;
 
             // Compute Insights
             const completionRate = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -4815,42 +4773,6 @@
                 }
             });
 
-            // --- 6. ESTIMATED REVENUE COMPARISON CHART ---
-            if (chartInstances.branchRev) chartInstances.branchRev.destroy();
-            const revA = jobs.filter(j => j.branch === 'Branch A' && (j.status === 'Completed' || j.status === 'Released')).reduce((acc, j) => acc + getSimulatedRevenue(j.category), 0);
-            const revB = jobs.filter(j => j.branch === 'Branch B' && (j.status === 'Completed' || j.status === 'Released')).reduce((acc, j) => acc + getSimulatedRevenue(j.category), 0);
-
-            const ctxBranchRev = document.getElementById('chart-branch-revenue').getContext('2d');
-            chartInstances.branchRev = new Chart(ctxBranchRev, {
-                type: 'bar',
-                data: {
-                    labels: ['HonTech Main (A)', 'HonTech East (B)'],
-                    datasets: [{
-                        label: 'Est. Revenue (₱)',
-                        data: [revA, revB],
-                        backgroundColor: 'rgba(245, 158, 11, 0.85)',
-                        borderColor: 'rgb(245, 158, 11)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { weight: 'bold', size: 10 } } }
-                    },
-                    scales: {
-                        y: { 
-                            beginAtZero: true, 
-                            ticks: { 
-                                callback: function(value) {
-                                    return '₱' + value.toLocaleString();
-                                }
-                            } 
-                        }
-                    }
-                }
-            });
         }
 
         function exportData(format) {
