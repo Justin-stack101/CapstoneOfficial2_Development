@@ -1407,9 +1407,14 @@
                         </h1>
                         <p id="tv-date-display" class="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">Sunday, June 21, 2026</p>
                         <!-- TV Branch Scope Indicator Badge -->
-                        <div onclick="toggleTVBranchScope()" class="mt-2 inline-flex items-center gap-2 bg-gray-800 border border-gray-700 px-3 py-1 rounded-xl cursor-pointer hover:bg-gray-750 hover:border-gray-600 hover:text-white transition duration-200" title="Click to manually toggle TV branch (Developer Option)">
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            <span id="tv-branch-name" class="text-[10px] font-black uppercase text-gray-300 tracking-widest">HonTech Main (Branch A)</span>
+                        <div id="tv-branch-badge" onclick="toggleTVBranchScope()" 
+                             class="mt-3 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 select-none bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/40 hover:border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)]" 
+                             title="Click to manually toggle TV branch (Developer Option)">
+                            <span class="relative flex h-2 w-2">
+                                <span id="tv-branch-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span id="tv-branch-dot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                            </span>
+                            <span id="tv-branch-name" class="text-[11px] font-extrabold uppercase tracking-widest text-emerald-200 font-sans">HonTech Main (Branch A)</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-6 text-right">
@@ -5408,10 +5413,31 @@
 
         function launchTVMode() { window.open(window.location.href.split('?')[0] + '?mode=tv', '_blank'); }
 
+        function updateTVBranchBadge() {
+            const badge = document.getElementById('tv-branch-badge');
+            const nameEl = document.getElementById('tv-branch-name');
+            const pingEl = document.getElementById('tv-branch-ping');
+            const dotEl = document.getElementById('tv-branch-dot');
+            if (!badge || !nameEl) return;
+
+            if (tvBranchScope === 'Branch A') {
+                badge.className = 'mt-3 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 select-none bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-900/40 hover:border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.15)]';
+                nameEl.className = 'text-[11px] font-extrabold uppercase tracking-widest text-emerald-200 font-sans';
+                nameEl.innerText = 'HonTech Main (Branch A)';
+                if (pingEl) pingEl.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+                if (dotEl) dotEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500';
+            } else {
+                badge.className = 'mt-3 inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full cursor-pointer transition-all duration-300 select-none bg-indigo-950/40 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-900/40 hover:border-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.15)]';
+                nameEl.className = 'text-[11px] font-extrabold uppercase tracking-widest text-indigo-200 font-sans';
+                nameEl.innerText = 'HonTech East (Branch B)';
+                if (pingEl) pingEl.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75';
+                if (dotEl) dotEl.className = 'relative inline-flex rounded-full h-2 w-2 bg-indigo-500';
+            }
+        }
+
         function toggleTVBranchScope() {
             tvBranchScope = tvBranchScope === 'Branch A' ? 'Branch B' : 'Branch A';
-            const badgeText = document.getElementById('tv-branch-name');
-            if (badgeText) badgeText.innerText = tvBranchScope === 'Branch A' ? 'HonTech Main (Branch A)' : 'HonTech East (Branch B)';
+            updateTVBranchBadge();
             renderTV();
             showSystemToast(`Simulated TV Scope manually toggled to: ${tvBranchScope === 'Branch A' ? 'Branch A (Main)' : 'Branch B (East)'}`, 'info', 'Dev Mode Toggle');
         }
@@ -5456,7 +5482,10 @@
                 tvInterval = setInterval(rotateTVSlides, 15000);
             });
             
-            loadData().then(() => renderTV());
+            loadData().then(() => {
+                updateTVBranchBadge();
+                renderTV();
+            });
         }
 
         function rotateTVSlides() {
