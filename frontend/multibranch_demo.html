@@ -1430,7 +1430,7 @@
                         </h1>
                         <p id="tv-date-display" class="text-xs font-bold text-gray-400 mt-1 uppercase tracking-widest">Sunday, June 21, 2026</p>
                         <!-- TV Branch Scope Indicator Badge -->
-                        <div class="mt-2 inline-flex items-center gap-2 bg-gray-800 border border-gray-700 px-3 py-1 rounded-xl">
+                        <div onclick="toggleTVBranchScope()" class="mt-2 inline-flex items-center gap-2 bg-gray-800 border border-gray-700 px-3 py-1 rounded-xl cursor-pointer hover:bg-gray-750 hover:border-gray-600 hover:text-white transition duration-200" title="Click to manually toggle TV branch (Developer Option)">
                             <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                             <span id="tv-branch-name" class="text-[10px] font-black uppercase text-gray-300 tracking-widest">HonTech Main (Branch A)</span>
                         </div>
@@ -5486,6 +5486,14 @@
 
         function launchTVMode() { window.open(window.location.href.split('?')[0] + '?mode=tv', '_blank'); }
 
+        function toggleTVBranchScope() {
+            tvBranchScope = tvBranchScope === 'Branch A' ? 'Branch B' : 'Branch A';
+            const badgeText = document.getElementById('tv-branch-name');
+            if (badgeText) badgeText.innerText = tvBranchScope === 'Branch A' ? 'HonTech Main (Branch A)' : 'HonTech East (Branch B)';
+            renderTV();
+            showSystemToast(`Simulated TV Scope manually toggled to: ${tvBranchScope === 'Branch A' ? 'Branch A (Main)' : 'Branch B (East)'}`, 'info', 'Dev Mode Toggle');
+        }
+
         function setupTVMode() {
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('app-shell').classList.remove('hidden');
@@ -5510,14 +5518,6 @@
 
             // Set slide interval to 15 seconds (15000ms) for longer display time
             tvInterval = setInterval(rotateTVSlides, 15000);
-            
-            // Rotate TV branch scope every 10 seconds to display Main & East queues
-            setInterval(() => {
-                tvBranchScope = tvBranchScope === 'Branch A' ? 'Branch B' : 'Branch A';
-                const badgeText = document.getElementById('tv-branch-name');
-                if (badgeText) badgeText.innerText = tvBranchScope === 'Branch A' ? 'HonTech Main (Branch A)' : 'HonTech East (Branch B)';
-                renderTV();
-            }, 10000);
 
             setInterval(updateClock, 1000);
             
