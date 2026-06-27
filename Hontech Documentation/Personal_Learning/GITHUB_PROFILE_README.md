@@ -12,7 +12,7 @@
     <a href="mailto:Justine03k@gmail.com">
       <img src="https://img.shields.io/badge/Email-0b4c3a?style=flat-square&logo=gmail&logoColor=white" alt="Email" />
     </a>
-    <a href="https://www.linkedin.com/in/justin-nolasco">
+    <a href="https://www.linkedin.com/in/justin-nolasco-858526407/">
       <img src="https://img.shields.io/badge/LinkedIn-0b4c3a?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" />
     </a>
   </div>
