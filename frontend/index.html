@@ -447,45 +447,17 @@
                         <!-- User Info -->
                         <div class="px-5 pb-3">
                             <p class="text-sm font-black text-gray-900" id="dropdown-user-name">User</p>
-                            <p class="text-xs font-semibold text-gray-500 truncate" id="dropdown-user-email">user@hontech.com</p>
-                            <span class="inline-flex mt-2 items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-600 border border-red-100" id="dropdown-user-role">
+                            <p class="text-xs font-semibold text-gray-500 truncate mb-1" id="dropdown-user-email">Sa@hontech.com</p>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-600 border border-red-100" id="dropdown-user-role">
                                 Role
                             </span>
                         </div>
 
-                        <!-- Theme Switcher Section -->
-                        <div class="px-5 py-3">
-                            <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Switch Color Theme</span>
-                            <div class="flex items-center gap-3">
-                                <button onclick="setTheme('default')" class="w-6 h-6 rounded-full bg-red-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Red (Default)" id="theme-btn-default"></button>
-                                <button onclick="setTheme('teal')" class="w-6 h-6 rounded-full bg-teal-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Teal" id="theme-btn-teal"></button>
-                                <button onclick="setTheme('blue')" class="w-6 h-6 rounded-full bg-blue-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Blue" id="theme-btn-blue"></button>
-                                <button onclick="setTheme('purple')" class="w-6 h-6 rounded-full bg-purple-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Purple" id="theme-btn-purple"></button>
-                                <button onclick="setTheme('orange')" class="w-6 h-6 rounded-full bg-orange-600 border-2 border-transparent hover:scale-110 active:scale-95 transition" title="Orange" id="theme-btn-orange"></button>
-                            </div>
-                        </div>
-
-                        <!-- Standard User Links -->
-                        <div class="px-3 py-2">
-                            <button onclick="showSection('profile'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
-                                <i data-lucide="user-circle" class="w-4 h-4 text-gray-400"></i>
-                                My Profile
-                            </button>
-                            <button onclick="showSection('settings'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
-                                <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
-                                Account Settings
-                            </button>
-                            <button onclick="showSection('support'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
-                                <i data-lucide="help-circle" class="w-4 h-4 text-gray-400"></i>
-                                Help & Support
-                            </button>
-                        </div>
-
-                        <!-- Sign Out Action -->
-                        <div class="px-3 py-2">
-                            <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition">
+                        <!-- Sign Out Action (Simplified, Simple and Practical) -->
+                        <div class="px-3 pt-3">
+                            <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-white bg-red-600 hover:bg-red-750 transition duration-205 shadow-md shadow-red-600/10">
                                 <i data-lucide="log-out" class="w-4 h-4"></i>
-                                Sign Out
+                                Log Out
                             </button>
                         </div>
                     </div>
@@ -1020,7 +992,7 @@
                             <label
                                 class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-1 block">Contact
                                 Number</label>
-                            <input type="text" id="intake-contact" placeholder="09XX-XXX-XXXX"
+                            <input type="text" id="intake-contact" placeholder="09XX-XXX-XXXX" oninput="formatContactNumber(this)"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
                         </div>
                         <div class="md:col-span-2">
@@ -1162,14 +1134,14 @@
                                     class="w-5 h-5"></i></div>
                             <div>
                                 <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes
-                                    Table</h3>
+                                    Table - Marikina</h3>
                                 <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active
                                     Vehicles in Workshop</p>
                             </div>
                         </div>
                     </div>
                     <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
-                        <table class="w-full text-left whitespace-nowrap min-w-[800px]">
+                        <table class="w-full text-left whitespace-nowrap min-w-[1650px]">
                             <thead>
                                 <tr>
                                     <th>Claim Stub</th>
@@ -2547,9 +2519,6 @@
                 defaultView = 'intake';
             }
 
-            // Append Profile button for all roles
-            navHTML += `<button onclick="showSection('profile', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="user-cog" class="w-4 h-4"></i> My Profile</button>`;
-
             nav.innerHTML = navHTML;
             lucide.createIcons();
 
@@ -3040,6 +3009,21 @@
             return phone;
         }
 
+        function formatContactNumber(input) {
+            let value = input.value.replace(/\D/g, '');
+            let formatted = '';
+            if (value.length > 0) {
+                formatted += value.substring(0, 4);
+            }
+            if (value.length > 4) {
+                formatted += '-' + value.substring(4, 7);
+            }
+            if (value.length > 7) {
+                formatted += '-' + value.substring(7, 11);
+            }
+            input.value = formatted;
+        }
+
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
             if (timeStr.includes('AM') || timeStr.includes('PM') || timeStr.includes('am') || timeStr.includes('pm')) {
@@ -3127,7 +3111,7 @@
                                 <input type="checkbox" ${job.confirmed ? 'checked' : ''} onchange="updateCheckbox('${job.id}', 'confirmed', this.checked)">
                             </td>
                             <td>
-                                <input type="text" value="${job.remarks || ''}" onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-xs w-36 border border-gray-200 bg-white" placeholder="Type action..." title="Only Assistant can edit action details prior to master queue push.">
+                                <input type="text" value="${job.concern || ''}" onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-xs w-36 border border-gray-200 bg-white" placeholder="Type action..." title="Only Assistant can edit action details prior to master queue push.">
                             </td>
                             <td class="text-right flex items-center justify-end gap-2">
                                 <button onclick="setJobStatus('${job.id}', 'Waiting')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition shadow-sm">Push Active</button>
@@ -3158,7 +3142,7 @@
                                 <span class="text-xs font-bold ${job.confirmed ? 'text-green-600' : 'text-gray-400'}">${job.confirmed ? 'Yes' : 'No'}</span>
                             </td>
                             <td>
-                                <span class="text-xs text-gray-700 font-medium">${job.remarks || '-'}</span>
+                                <span class="text-xs text-gray-700 font-medium">${job.concern || '-'}</span>
                             </td>
                             <td class="text-right text-gray-400 text-xs italic">
                                 Read-Only
@@ -3181,16 +3165,17 @@
                                 <th class="px-3 py-3.5 bg-gray-50">Claim Stub</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Plate No.</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Model & Category</th>
-                                <th class="px-3 py-3.5 bg-gray-50">Branch</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Date</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Source</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Arrival</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Departure</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Parts</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Evaluation / Diagnosis</th>
-                                <th class="px-3 py-3.5 bg-gray-50">GRS Recommendation</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Waiting for Approval</th>
                                 ${showGoal ? '<th class="px-3 py-3.5 bg-gray-50">SLA Status (2h)</th>' : ''}
                                 <th class="px-3 py-3.5 bg-gray-50">Status</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Location</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Promised Date</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Remarks / Reasons</th>
                                 <th class="px-3 py-3.5 text-right w-44 bg-gray-50">Action</th>
                             </tr>
@@ -3214,48 +3199,60 @@
                         return `
                         <tr class="${job.status === 'Ready' ? 'bg-green-50/50' : job.status === 'Released' ? 'bg-gray-50/80' : ''}">
                             <!-- Claim Stub -->
-                            <td class="px-3 py-4"><span class="font-mono text-gray-500 font-bold text-sm bg-gray-100 px-2 py-1 rounded">${job.claimStub || 'N/A'}</span></td>
+                            <td class="px-3 py-4" style="min-width: 120px;"><span class="font-mono text-gray-500 font-bold text-sm bg-gray-100 px-2 py-1 rounded">${job.claimStub || 'N/A'}</span></td>
                             
                             <!-- Plate -->
-                            <td class="px-3 py-4"><span class="font-black italic text-gray-900 text-lg">${job.plate}</span></td>
+                            <td class="px-3 py-4" style="min-width: 110px;"><span class="font-black italic text-gray-900 text-lg">${job.plate}</span></td>
                             
                             <!-- Model & Category -->
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 220px;">
                                 <div class="font-bold text-gray-900">${job.vehicle}</div>
-                                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">${job.category} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
                                 ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-[10px] font-bold uppercase w-36 border border-gray-200 bg-white cursor-pointer block mt-1">
-                                    <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
-                                    <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
-                                    <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
-                                </select>
+                                <div class="flex flex-col gap-1 mt-1">
+                                    <select onchange="updateJobField('${job.id}', 'category', this.value)" class="table-select text-[10px] font-bold uppercase w-full border border-gray-200 bg-white cursor-pointer">
+                                        <option value="PMS" ${job.category === 'PMS' ? 'selected' : ''}>PMS</option>
+                                        <option value="GRS" ${job.category === 'GRS' ? 'selected' : ''}>GRS</option>
+                                        <option value="PMS AND GRS" ${job.category === 'PMS AND GRS' ? 'selected' : ''}>PMS & GRS</option>
+                                        <option value="Others" ${job.category !== 'PMS' && job.category !== 'GRS' && job.category !== 'PMS AND GRS' ? 'selected' : ''}>Others</option>
+                                    </select>
+                                    <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-[10px] font-bold uppercase w-full border border-gray-200 bg-white cursor-pointer mt-1">
+                                        <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
+                                        <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
+                                        <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
+                                    </select>
+                                </div>
                                 ` : `
+                                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">${job.category || 'N/A'} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
                                 <div class="text-[10px] text-red-600 font-bold uppercase mt-1">Lane: ${job.laneType || 'Flexible (Ordinary)'}</div>
                                 `}
                             </td>
                             
-                            <!-- Branch -->
-                            <td class="px-3 py-4"><span class="text-xs font-semibold text-gray-700">${job.branch || 'Branch A'}</span></td>
+                            <!-- Date (Scheduled/Received) -->
+                            <td class="px-3 py-4" style="min-width: 140px;">
+                                ${isEditable ? `
+                                <input type="date" value="${job.dateReceived || ''}" onchange="updateJobField('${job.id}', 'dateReceived', this.value)" class="table-select text-xs w-full border border-gray-200 bg-white">
+                                ` : `<span class="text-xs font-semibold text-gray-700">${job.dateReceived || ''}</span>`}
+                            </td>
                             
                             <!-- Source -->
-                            <td class="px-3 py-4">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${job.source === 'Online' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">${job.source || 'Walk-in'}</span>
+                            <td class="px-3 py-4" style="min-width: 100px;">
+                                <span class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${job.source === 'Online' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">${job.source || 'Walk-in'}</span>
                             </td>
 
                             <!-- Arrival -->
-                            <td class="px-3 py-4">
-                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
+                            <td class="px-3 py-4" style="min-width: 110px;">
+                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-full border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${job.arrival ? formatTime12Hour(job.arrival) : '--:--'}</span>`}
                             </td>
                             
                             <!-- Departure -->
-                            <td class="px-3 py-4">
-                                ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
+                            <td class="px-3 py-4" style="min-width: 110px;">
+                                ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-full border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${job.departure ? formatTime12Hour(job.departure) : '--:--'}</span>`}
                             </td>
                             
                             <!-- Parts -->
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 120px;">
                                 ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-28 border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
+                                <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
                                     <option value="Pending" ${job.partsAvailable === 'Pending' ? 'selected' : ''}>Pending</option>
                                     <option value="Yes" ${job.partsAvailable === 'Yes' ? 'selected' : ''}>Yes</option>
                                     <option value="No" ${job.partsAvailable === 'No' ? 'selected' : ''}>No</option>
@@ -3265,54 +3262,22 @@
                             </td>
                             
                             <!-- Evaluation / Diagnosis -->
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 180px;">
                                 ${isEditable ? `
-                                <input type="text" value="${job.evaluation || ''}" placeholder="Diagnosis..." onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white">
+                                <input type="text" value="${job.evaluation || ''}" placeholder="Diagnosis..." onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white">
                                 ` : `<span class="text-sm font-medium text-gray-600">${job.evaluation || '-'}</span>`}
                             </td>
 
-                            <!-- GRS Recommendation -->
-                            <td class="px-3 py-4">
+                            <!-- Waiting for Approval -->
+                            <td class="px-3 py-4" style="min-width: 200px;">
                                 ${isEditable ? `
-                                <div class="flex flex-col gap-1.5 w-40">
-                                    <select onchange="updateJobField('${job.id}', 'recommendation', this.value)" class="table-select font-bold text-xs uppercase border border-gray-200 bg-white" style="${job.recommendation === 'Approved' ? 'color:#10b981' : job.recommendation === 'Declined' ? 'color:#ef4444' : job.recommendation === 'Pending Approval' ? 'color:#f97316' : 'color:#6b7280'}">
-                                        <option value="None" ${job.recommendation === 'None' ? 'selected' : ''}>None</option>
-                                        <option value="Pending Approval" ${job.recommendation === 'Pending Approval' ? 'selected' : ''}>Pending Approval</option>
-                                        <option value="Approved" ${job.recommendation === 'Approved' ? 'selected' : ''}>Approved</option>
-                                        <option value="Declined" ${job.recommendation === 'Declined' ? 'selected' : ''}>Declined</option>
-                                    </select>
-                                    <input type="text" value="${job.recommendationNotes || ''}" placeholder="Rec Notes..." onchange="updateJobField('${job.id}', 'recommendationNotes', this.value)" class="table-select text-xs text-gray-900 border border-gray-200 bg-white py-0.5">
-                                    ${job.recommendation === 'Pending Approval' ? `
-                                    <div class="flex flex-col gap-1 mt-1">
-                                        <span class="animate-pulse bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center font-semibold">PENDING CLIENT OK</span>
-                                        <div class="flex gap-1 justify-center">
-                                            <button onclick="approveGRS('${job.id}')" class="bg-green-600 hover:bg-green-700 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase transition">Approve GRS</button>
-                                            <button onclick="declineGRS('${job.id}')" class="bg-red-650 hover:bg-red-700 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase transition">Decline GRS</button>
-                                        </div>
-                                    </div>
-                                    ` : job.recommendation === 'Approved' ? `
-                                    <span class="bg-green-100 text-green-700 border border-green-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Approved</span>
-                                    ` : job.recommendation === 'Declined' ? `
-                                    <span class="bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Declined</span>
-                                    ` : ''}
-                                </div>
-                                ` : `
-                                <div class="flex flex-col gap-1 w-32">
-                                    ${job.recommendation === 'Pending Approval' ? `
-                                    <span class="animate-pulse bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center font-semibold">PENDING CLIENT OK</span>
-                                    ` : job.recommendation === 'Approved' ? `
-                                    <span class="bg-green-100 text-green-700 border border-green-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Approved</span>
-                                    ` : job.recommendation === 'Declined' ? `
-                                    <span class="bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Declined</span>
-                                    ` : `<span class="text-xs text-gray-500 font-medium">None</span>`}
-                                    <span class="text-[10px] text-gray-500 block truncate max-w-[120px]" title="${job.recommendationNotes || ''}">${job.recommendationNotes || ''}</span>
-                                </div>
-                                `}
+                                <input type="text" value="${job.recommendationNotes || ''}" placeholder="Type approval item..." onchange="updateJobField('${job.id}', 'recommendationNotes', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white py-1">
+                                ` : `<span class="text-sm font-medium text-gray-600">${job.recommendationNotes || '-'}</span>`}
                             </td>
                             
                             <!-- SLA status -->
                             ${showGoal ? `
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 140px;">
                                 <span class="px-2 py-1 rounded text-xs font-bold uppercase ${job.goalStatus === 'Successful' ? 'bg-green-50 text-green-700 border border-green-100' : job.goalStatus === 'Failed' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-gray-100 text-gray-700'}">
                                     ${job.goalStatus || 'N/A'}
                                 </span>
@@ -3320,23 +3285,22 @@
                             ` : ''}
                             
                             <!-- Status -->
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 160px;">
                                 ${isEditable ? `
-                                <select onchange="handleStatusChange('${job.id}', this.value, this)" class="table-select font-bold text-xs uppercase w-40 border border-gray-200 bg-white" style="${job.status === 'Ready' ? 'color:#10b981' : job.status === 'Carry Over' ? 'color:#f97316' : 'color:#374151'}">
+                                <select onchange="handleStatusChange('${job.id}', this.value, this)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white" style="${job.status === 'Ready' ? 'color:#10b981' : job.status === 'Carry Over' ? 'color:#f97316' : 'color:#374151'}">
                                     <option value="Waiting" ${job.status === 'Waiting' ? 'selected' : ''}>Waiting</option>
                                     <option value="In Progress" ${job.status === 'In Progress' || job.status.startsWith('Lift') ? 'selected' : ''} disabled>In Progress</option>
                                     <option value="Ready" ${job.status === 'Ready' ? 'selected' : ''}>Ready (Show TV)</option>
                                     <option value="Carry Over" ${job.status === 'Carry Over' ? 'selected' : ''}>Carry Over</option>
-                                    <option value="Released" ${job.status === 'Released' ? 'selected' : ''}>Released (Remove List)</option>
+                                    <option value="Released" ${job.status === 'Released' ? 'selected' : ''}>Released (TV Release)</option>
                                 </select>
                                 ` : `<span class="px-2 py-1 rounded bg-gray-100 text-xs font-bold uppercase text-gray-700">${job.status}</span>`}
                             </td>
-
                             <!-- Location -->
-                            <td class="px-3 py-4">
+                            <td class="px-3 py-4" style="min-width: 140px;">
                                 ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'location', this.value)" class="table-select font-bold text-xs uppercase w-36 border border-gray-200 bg-white" style="${job.location !== 'None' ? 'background-color:#fee2e2; color:#b91c1c; border-color:#fca5a5;' : 'color:#6b7280; background-color:#ffffff;'}">
-                                    <option value="None" ${job.location === 'None' ? 'selected' : ''}>Waiting Area</option>
+                                <select onchange="updateJobField('${job.id}', 'location', this.value)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white cursor-pointer" style="${job.location !== 'None' ? 'color:#dc2626' : 'color:#6b7280'}">
+                                    <option value="None" ${job.location === 'None' ? 'selected' : ''}>None</option>
                                     ${[1, 2, 3, 4].map(i => {
                                         const liftName = `Lift ${i}`;
                                         const occupiedBy = rowOccupiedLifts[liftName];
@@ -3350,22 +3314,29 @@
                                 ` : (job.location && job.location.startsWith('Lift')) ? `<span class="px-2 py-1 rounded bg-red-100 text-xs font-bold uppercase text-red-700">${job.location}</span>` : `<span class="px-2 py-1 rounded bg-gray-100 text-xs font-bold uppercase text-gray-500">Waiting Area</span>`}
                             </td>
                             
-                            <!-- Remarks -->
-                            <td class="px-3 py-4">
+                            <!-- Promised Date -->
+                            <td class="px-3 py-4" style="min-width: 140px;">
                                 ${isEditable ? `
-                                <input type="text" value="${job.remarks || ''}" placeholder="Remarks/Reasons..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white">
+                                <input type="date" value="${job.promisedDate || ''}" onchange="updateJobField('${job.id}', 'promisedDate', this.value)" class="table-select text-xs w-full border border-gray-200 bg-white">
+                                ` : `<span class="text-xs font-semibold text-gray-700">${job.promisedDate || 'TBD'}</span>`}
+                            </td>
+                            
+                            <!-- Remarks -->
+                            <td class="px-3 py-4" style="min-width: 180px;">
+                                ${isEditable ? `
+                                <input type="text" value="${job.remarks || ''}" placeholder="Remarks/Reasons..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white">
                                 ` : `<span class="text-sm font-medium text-gray-600">${job.remarks || '-'}</span>`}
                             </td>
 
                             <!-- Action -->
-                            <td class="px-3 py-4 text-right">
+                            <td class="px-3 py-4 text-right" style="min-width: 180px;">
                                 <div class="flex items-center gap-2 justify-end">
                                     ${job.status === 'Released' && isEditable ? `
                                         <button onclick="completeRelease('${job.id}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-black uppercase transition shadow-sm whitespace-nowrap flex items-center gap-1" title="Finalize and remove from list">
                                             <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Released
                                         </button>
                                     ` : isEditable ? `
-                                        <input type="text" value="${job.concern || ''}" placeholder="Edit Concerns/Notes..." onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white text-left text-xs">
+                                        <input type="text" value="${job.concern || ''}" placeholder="Edit Concerns/Notes..." onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white text-left text-xs">
                                     ` : `<span class="text-xs font-semibold text-gray-600">${job.concern || '-'}</span>`}
                                 </div>
                             </td>
@@ -3406,16 +3377,16 @@
                                 <div class="flex items-center gap-3">
                                     <div class="p-2 bg-red-50 rounded-lg text-red-600"><i data-lucide="list-todo" class="w-5 h-5"></i></div>
                                     <div>
-                                        <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table</h3>
+                                        <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table - Marikina</h3>
                                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active Vehicles in Workshop</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
-                                <table class="w-full text-left whitespace-nowrap min-w-[800px]">
+                                <table class="w-full text-left whitespace-nowrap min-w-[1650px]">
                                     ${getTableHeaderHtml()}
                                     <tbody>
-                                        ${renderJobRows(isSA ? filteredActiveJobs : activeJobs) || `<tr><td colspan="${showGoal ? 15 : 14}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
+                                        ${renderJobRows(isSA ? filteredActiveJobs : activeJobs) || `<tr><td colspan="${showGoal ? 16 : 15}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
                                     </tbody>
                                 </table>
                             </div>
