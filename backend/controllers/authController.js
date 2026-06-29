@@ -223,9 +223,9 @@ export const deleteStaff = async (req, res) => {
       return res.status(404).json({ message: 'Staff member not found.' });
     }
 
-    // Safeguard: Cannot delete the primary owner
-    if (userToDelete.role === 'owner' && userToDelete.email === 'owner@hontech.com') {
-      return res.status(400).json({ message: 'Cannot remove the primary System Admin account.' });
+    // Safeguard: Cannot delete system owners
+    if (userToDelete.role === 'owner') {
+      return res.status(403).json({ message: 'Access forbidden. System Owner accounts cannot be deleted.' });
     }
 
     await User.findByIdAndDelete(id);
@@ -236,87 +236,11 @@ export const deleteStaff = async (req, res) => {
 };
 
 export const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
-  try {
-    if (!email) {
-      return res.status(400).json({ message: 'Email is required.' });
-    }
-
-    const targetEmail = email.toLowerCase().trim();
-    // Search by primary email OR verified backup recovery email
-    const user = await User.findOne({
-      $or: [
-        { email: targetEmail },
-        { backupEmail: targetEmail }
-      ]
-    });
-
-    if (!user) {
-      return res.status(404).json({ message: 'No user found with that email address.' });
-    }
-
-    // Generate 6-digit OTP code for password reset
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-
-    user.resetPasswordToken = otp;
-    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // valid for 15 minutes
-    await user.save();
-
-    console.log(`[PASSWORD RESET OTP] for ${targetEmail}: ${otp}`);
-
-    await sendEmail({
-      to: targetEmail,
-      subject: 'HonTech Security: Password Reset Request',
-      text: `Your password reset code is: ${otp}. It is valid for 15 minutes.`,
-      html: generateSupercellEmailHtml({
-        title: 'Password Reset Request',
-        bodyText: `We received a request to reset your password. Please use the following 6-digit verification code to complete the password reset process:`,
-        code: otp,
-        footerText: 'This verification code is valid for 15 minutes. If you did not request a password reset, you can safely ignore this email.'
-      })
-    });
-
-    res.status(200).json({
-      message: `A password reset code has been sent. For testing, the code is: ${otp}`,
-      token: otp
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during forgot password.', error: error.message });
-  }
+  return res.status(403).json({ message: 'Self-service password recovery is disabled. Please contact your system administrator to recover or reset your password.' });
 };
 
 export const resetPassword = async (req, res) => {
-  const { email, token, newPassword } = req.body;
-
-  try {
-    if (!email || !token || !newPassword) {
-      return res.status(400).json({ message: 'Email, code, and new password are required.' });
-    }
-
-    const targetEmail = email.toLowerCase().trim();
-    const user = await User.findOne({
-      $or: [
-        { email: targetEmail },
-        { backupEmail: targetEmail }
-      ],
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }
-    });
-
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired password reset code.' });
-    }
-
-    user.password = newPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    await user.save();
-
-    res.status(200).json({ message: 'Password has been successfully reset.' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error during password reset.', error: error.message });
-  }
+  return res.status(403).json({ message: 'Self-service password recovery is disabled. Please contact your system administrator to recover or reset your password.' });
 };
 
 // --- PROFILE MANAGEMENT & SECURITY CONTROLS ---
@@ -698,6 +622,11 @@ export const resetStaffPassword = async (req, res) => {
       return res.status(404).json({ message: 'Personnel account not found.' });
     }
 
+    // Hierarchy safeguard: Admin cannot modify Owner
+    if (user.role === 'owner' && req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Access forbidden. Administrators cannot modify the System Owner account.' });
+    }
+
     user.password = newPassword;
     await user.save();
 
@@ -717,8 +646,9 @@ export const toggleStaffActiveStatus = async (req, res) => {
       return res.status(404).json({ message: 'Personnel account not found.' });
     }
 
-    if (user.role === 'owner' && user.email === 'owner@hontech.com') {
-      return res.status(400).json({ message: 'Cannot deactivate the primary System Owner account.' });
+    // Hierarchy safeguard: Admin cannot modify Owner
+    if (user.role === 'owner') {
+      return res.status(403).json({ message: 'Cannot suspend or deactivate System Owner accounts.' });
     }
 
     user.isActive = isActive;
@@ -752,9 +682,9 @@ export const updateStaffRole = async (req, res) => {
       return res.status(404).json({ message: 'Staff member not found.' });
     }
 
-    // Safety check: Cannot change primary owner's role
-    if (user.role === 'owner' && user.email === 'owner@hontech.com') {
-      return res.status(400).json({ message: 'Cannot demote the primary System Admin.' });
+    // Hierarchy safeguard: Admin cannot modify Owner, and Owner role is protected
+    if (user.role === 'owner' || (role === 'owner' && req.user.role !== 'owner')) {
+      return res.status(403).json({ message: 'Access forbidden. Owner role is protected and cannot be assigned or demoted by Administrators.' });
     }
 
     user.role = role;
@@ -784,6 +714,11 @@ export const updateStaffBranch = async (req, res) => {
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: 'Staff member not found.' });
+    }
+
+    // Hierarchy safeguard: Admin cannot modify Owner
+    if (user.role === 'owner' && req.user.role === 'admin') {
+      return res.status(403).json({ message: 'Access forbidden. Administrators cannot modify the System Owner account.' });
     }
 
     user.branch = branch;

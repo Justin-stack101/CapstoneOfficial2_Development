@@ -77,11 +77,11 @@ router.post('/google/unlink', authenticateUser, googleUnlink);
 
 // Owner and Admin staff management routes
 router.get('/staff', authenticateUser, requireRole(['owner', 'admin']), getStaff);
-router.post('/staff', authenticateUser, requireRole(['admin']), createStaff);
-router.delete('/staff/:id', authenticateUser, requireRole(['admin']), deleteStaff);
-router.post('/staff/:id/reset-password', authenticateUser, requireRole(['admin']), resetStaffPassword);
-router.patch('/staff/:id/toggle-active', authenticateUser, requireRole(['admin']), toggleStaffActiveStatus);
-router.put('/staff/:id/role', authenticateUser, requireRole(['admin']), updateStaffRole);
-router.patch('/staff/:id/branch', authenticateUser, requireRole(['admin']), updateStaffBranch);
+router.post('/staff', authenticateUser, requireRole(['owner', 'admin']), createStaff);
+router.delete('/staff/:id', authenticateUser, requireRole(['owner', 'admin']), deleteStaff);
+router.post('/staff/:id/reset-password', authenticateUser, requireRole(['owner', 'admin']), resetStaffPassword);
+router.patch('/staff/:id/toggle-active', authenticateUser, requireRole(['owner', 'admin']), toggleStaffActiveStatus);
+router.put('/staff/:id/role', authenticateUser, requireRole(['owner', 'admin']), updateStaffRole);
+router.patch('/staff/:id/branch', authenticateUser, requireRole(['owner', 'admin']), updateStaffBranch);
 
 export default router;
