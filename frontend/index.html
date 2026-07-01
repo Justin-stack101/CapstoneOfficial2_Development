@@ -2247,6 +2247,12 @@
 
         // Base fetch helper to deal with absolute URL resolutions and JSON conversions
         async function apiRequest(url, options = {}) {
+            let targetUrl = url;
+            if (url.startsWith('/api/auth')) {
+                targetUrl = '/backend-php/api/auth.php' + url.substring(9);
+            } else if (url.startsWith('/api/jobs')) {
+                targetUrl = '/backend-php/api/jobs.php' + url.substring(9);
+            }
             try {
                 const defaultOptions = {
                     headers: { 'Content-Type': 'application/json' },
@@ -2255,7 +2261,7 @@
                 if (defaultOptions.body && typeof defaultOptions.body === 'object') {
                     defaultOptions.body = JSON.stringify(defaultOptions.body);
                 }
-                const response = await fetch(url, defaultOptions);
+                const response = await fetch(targetUrl, defaultOptions);
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -2809,7 +2815,7 @@
             let apptDate = '', apptTime = '', confirmed = false, laneType = '';
 
             if (isWalkin) {
-                arrival = document.getElementById('intake-arrival').value || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                arrival = document.getElementById('intake-arrival').value || new Date().toTimeString().slice(0, 5);
             } else {
                 apptDate = document.getElementById('intake-appt-date').value;
                 apptTime = document.getElementById('intake-appt-time').value;

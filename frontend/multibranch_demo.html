@@ -2643,7 +2643,7 @@
                             goalStatus: 'N/A',
                             branch: body.branch || 'Branch A',
                             source: body.source || 'Walk-in',
-                            arrival: body.arrival || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
+                            arrival: body.arrival || new Date().toTimeString().slice(0, 5),
                             apptDate: body.apptDate || '',
                             apptTime: body.apptTime || '',
                             confirmed: body.confirmed || false,
@@ -2688,7 +2688,7 @@
                             job.status = body.status;
                             if (body.status === 'Completed' || body.status === 'Released') {
                                 if (!job.departure) {
-                                    job.departure = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                                    job.departure = new Date().toTimeString().slice(0, 5);
                                 }
                                 job.goalStatus = calculateGoalStatusForJob(job);
                             }
@@ -3327,7 +3327,7 @@
             let apptDate = '', apptTime = '', confirmed = false, laneType = '';
 
             if (isWalkin) {
-                arrival = document.getElementById('intake-arrival').value || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                arrival = document.getElementById('intake-arrival').value || new Date().toTimeString().slice(0, 5);
             } else {
                 apptDate = document.getElementById('intake-appt-date').value;
                 apptTime = document.getElementById('intake-appt-time').value;
