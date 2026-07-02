@@ -3544,7 +3544,6 @@
                                 <th class="px-3 py-3.5 bg-gray-50">Source</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Arrival</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Departure</th>
-                                <th class="px-3 py-3.5 bg-gray-50">Parts</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Evaluation / Diagnosis</th>
                                 <th class="px-3 py-3.5 bg-gray-50">GRS Recommendation</th>
                                 ${showGoal ? '<th class="px-3 py-3.5 bg-gray-50">SLA Status (2h)</th>' : ''}
@@ -3611,18 +3610,7 @@
                                 ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
                             </td>
                             
-                            <!-- Parts -->
-                            <td class="px-3 py-4">
-                                ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-28 border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
-                                    <option value="Pending" ${job.partsAvailable === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Yes" ${job.partsAvailable === 'Yes' ? 'selected' : ''}>Yes</option>
-                                    <option value="No" ${job.partsAvailable === 'No' ? 'selected' : ''}>No</option>
-                                    <option value="WCA" ${job.partsAvailable === 'WCA' ? 'selected' : ''}>WCA</option>
-                                </select>
-                                ` : `<span class="text-xs font-bold uppercase ${job.partsAvailable === 'Yes' ? 'text-green-600' : job.partsAvailable === 'No' ? 'text-red-600' : job.partsAvailable === 'WCA' ? 'text-orange-600' : 'text-gray-500'}">${job.partsAvailable}</span>`}
-                            </td>
-                            
+
                             <!-- Evaluation / Diagnosis -->
                             <td class="px-3 py-4">
                                 ${isEditable ? `
