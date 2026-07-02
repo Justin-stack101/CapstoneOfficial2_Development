@@ -4653,7 +4653,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Draw header bar (Red theme)
@@ -4787,7 +4787,7 @@
             showSystemToast('Consolidating data for Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Prepare metrics
@@ -4925,7 +4925,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5071,7 +5071,7 @@
             showSystemToast('Consolidating data for analytics Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
