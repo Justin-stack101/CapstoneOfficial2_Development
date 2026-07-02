@@ -3479,8 +3479,10 @@
             if (!isPMS) return 'N/A';
             if (!job.arrival || !job.departure) return 'N/A';
             try {
-                const [arrH, arrM] = job.arrival.split(':').map(Number);
-                const [depH, depM] = job.departure.split(':').map(Number);
+                const arrivalClean = formatTime12Hour(job.arrival);
+                const departureClean = formatTime12Hour(job.departure);
+                const [arrH, arrM] = arrivalClean.split(':').map(Number);
+                const [depH, depM] = departureClean.split(':').map(Number);
                 if (isNaN(arrH) || isNaN(arrM) || isNaN(depH) || isNaN(depM)) return 'N/A';
 
                 const arrMin = arrH * 60 + arrM;
