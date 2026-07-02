@@ -1926,9 +1926,9 @@
 
                             <div>
                                 <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-2 block">System Clock Format</label>
-                                <select class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
-                                    <option>12-Hour format (AM/PM)</option>
-                                    <option>24-Hour format (Military)</option>
+                                <select id="settings-time-format" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-semibold text-xs text-gray-900 focus:border-red-600 focus:bg-white transition">
+                                    <option value="12h">12-Hour format (AM/PM)</option>
+                                    <option value="24h">24-Hour format (Military)</option>
                                 </select>
                             </div>
 
@@ -1993,8 +1993,8 @@
                         </div>
 
                         <div class="border-t border-gray-100 pt-6 flex justify-end">
-                            <button onclick="showSystemToast('Mock Settings saved successfully (Preview only).', 'success', 'Settings Saved')" class="bg-gray-900 hover:bg-black text-white font-black uppercase text-xs tracking-wider px-6 py-3 rounded-xl transition shadow-md">
-                                Save Settings Mock
+                            <button onclick="saveSystemSettings()" class="bg-gray-900 hover:bg-black text-white font-black uppercase text-xs tracking-wider px-6 py-3 rounded-xl transition shadow-md">
+                                Save Settings
                             </button>
                         </div>
                     </div>
@@ -2542,6 +2542,9 @@
             } catch (e) {
                 // Not logged in, stay on auth view
             }
+
+            // Initialize time format setting
+            initTimeFormatSetting();
 
             setInterval(updateClock, 1000);
             updateClock();
@@ -3456,22 +3459,48 @@
             await updateJobField(jobId, field, newVal);
         }
 
+        function saveSystemSettings() {
+            const formatSelect = document.getElementById('settings-time-format');
+            if (formatSelect) {
+                const is24h = formatSelect.value === '24h';
+                localStorage.setItem('timeFormat24h', is24h ? 'true' : 'false');
+                showSystemToast('Time format setting saved successfully.', 'success', 'Settings Saved');
+                renderStaffTables();
+                renderTV();
+                updateClock();
+            }
+        }
+
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
+            const is24h = localStorage.getItem('timeFormat24h') !== 'false';
             const lower = timeStr.toLowerCase();
+            let isOriginalPm = false;
+            let clean = timeStr;
             if (lower.includes('am') || lower.includes('pm')) {
-                const isPm = lower.includes('pm');
-                const clean = timeStr.replace(/am|pm/gi, '').trim();
-                const parts = clean.split(':');
-                if (parts.length >= 2) {
-                    let hour = parseInt(parts[0], 10);
-                    const minute = parts[1].trim();
-                    if (isPm && hour < 12) hour += 12;
-                    if (!isPm && hour === 12) hour = 0;
-                    return `${String(hour).padStart(2, '0')}:${minute}`;
-                }
+                isOriginalPm = lower.includes('pm');
+                clean = timeStr.replace(/am|pm/gi, '').trim();
             }
-            return timeStr;
+            const parts = clean.split(':');
+            if (parts.length < 2) return timeStr;
+            let hour = parseInt(parts[0], 10);
+            const minute = parts[1].trim();
+            if (isNaN(hour)) return timeStr;
+
+            if (lower.includes('am') || lower.includes('pm')) {
+                if (isOriginalPm && hour < 12) hour += 12;
+                if (!isOriginalPm && hour === 12) hour = 0;
+            }
+
+            if (is24h) {
+                return `${String(hour).padStart(2, '0')}:${minute}`;
+            } else {
+                const isPm = hour >= 12;
+                hour = hour % 12;
+                hour = hour ? hour : 12;
+                const ampm = isPm ? 'PM' : 'AM';
+                return `${String(hour).padStart(2, '0')}:${minute} ${ampm}`;
+            }
         }
 
         function calculateGoalStatusForJob(job) {
@@ -4746,7 +4775,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: localStorage.getItem('timeFormat24h') === 'false', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Draw header bar (Red theme)
@@ -4880,7 +4909,7 @@
             showSystemToast('Consolidating data for Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: localStorage.getItem('timeFormat24h') === 'false', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Prepare metrics
@@ -5018,7 +5047,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: localStorage.getItem('timeFormat24h') === 'false', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5164,7 +5193,7 @@
             showSystemToast('Consolidating data for analytics Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: localStorage.getItem('timeFormat24h') === 'false', hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5529,9 +5558,21 @@
             startTVAutoScroll();
         }
 
+        function initTimeFormatSetting() {
+            const saved = localStorage.getItem('timeFormat24h');
+            if (saved === null) {
+                localStorage.setItem('timeFormat24h', 'true');
+            }
+            const settingsSelect = document.getElementById('settings-time-format');
+            if (settingsSelect) {
+                settingsSelect.value = localStorage.getItem('timeFormat24h') === 'true' ? '24h' : '12h';
+            }
+        }
+
         function updateClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            const is24h = localStorage.getItem('timeFormat24h') !== 'false';
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: !is24h, hour: '2-digit', minute: '2-digit' });
             if (document.getElementById('sys-clock')) document.getElementById('sys-clock').innerText = timeStr;
             if (document.getElementById('tv-clock-display')) document.getElementById('tv-clock-display').innerText = timeStr;
             
