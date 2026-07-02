@@ -1226,8 +1226,11 @@
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Arrival
                                     Time <span class="text-red-500">*</span></label>
-                                <input type="text" id="intake-arrival" placeholder="e.g. 13:00 (24h)" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM), e.g. 13:00"
-                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
+                                <div class="flex items-center gap-1.5 w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-1.5 focus-within:border-red-600 focus-within:bg-white transition">
+                                    <select id="intake-arrival-hour" class="bg-transparent text-xs font-bold text-gray-900 outline-none w-full cursor-pointer"></select>
+                                    <span class="text-gray-500 font-bold">:</span>
+                                    <select id="intake-arrival-minute" class="bg-transparent text-xs font-bold text-gray-900 outline-none w-full cursor-pointer"></select>
+                                </div>
                             </div>
                             <div class="md:col-span-1">
                                 <label
@@ -1243,9 +1246,12 @@
                             <div class="md:col-span-1">
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Appt
-                                    Time</label>
-                                <input type="text" id="intake-appt-time" placeholder="e.g. 13:00 (24h)" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM), e.g. 13:00"
-                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
+                                    Time <span class="text-red-500">*</span></label>
+                                <div class="flex items-center gap-1.5 w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-1.5 focus-within:border-red-600 focus-within:bg-white transition">
+                                    <select id="intake-appt-hour" class="bg-transparent text-xs font-bold text-gray-900 outline-none w-full cursor-pointer"></select>
+                                    <span class="text-gray-500 font-bold">:</span>
+                                    <select id="intake-appt-minute" class="bg-transparent text-xs font-bold text-gray-900 outline-none w-full cursor-pointer"></select>
+                                </div>
                             </div>
                             <div class="md:col-span-1">
                                 <label
@@ -3170,6 +3176,20 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('intake-date').value = today;
 
+            const arrHour = document.getElementById('intake-arrival-hour');
+            const arrMin = document.getElementById('intake-arrival-minute');
+            const apptHour = document.getElementById('intake-appt-hour');
+            const apptMin = document.getElementById('intake-appt-minute');
+
+            const now = new Date();
+            const currHour = String(now.getHours()).padStart(2, '0');
+            const currMin = String(now.getMinutes()).padStart(2, '0');
+
+            if (arrHour) arrHour.innerHTML = getHourOptions(currHour);
+            if (arrMin) arrMin.innerHTML = getMinuteOptions(currMin);
+            if (apptHour) apptHour.innerHTML = getHourOptions(currHour);
+            if (apptMin) apptMin.innerHTML = getMinuteOptions(currMin);
+
             // Reset Category Select and Specify Input
             const catSelect = document.getElementById('intake-category');
             if (catSelect) catSelect.value = 'PMS';
@@ -3230,10 +3250,14 @@
             let apptDate = '', apptTime = '', confirmed = false, laneType = '';
 
             if (isWalkin) {
-                arrival = document.getElementById('intake-arrival').value || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+                const hour = document.getElementById('intake-arrival-hour').value;
+                const min = document.getElementById('intake-arrival-minute').value;
+                arrival = `${hour}:${min}`;
             } else {
                 apptDate = date;
-                apptTime = document.getElementById('intake-appt-time').value;
+                const hour = document.getElementById('intake-appt-hour').value;
+                const min = document.getElementById('intake-appt-minute').value;
+                apptTime = `${hour}:${min}`;
                 confirmed = document.getElementById('intake-confirmed').checked;
                 laneType = document.getElementById('intake-lane-type').value;
             }
@@ -3393,6 +3417,45 @@
             return phone;
         }
 
+        function getHourOptions(selectedHour) {
+            let html = '';
+            const sel = selectedHour ? String(selectedHour).padStart(2, '0') : '';
+            for (let i = 0; i < 24; i++) {
+                const val = String(i).padStart(2, '0');
+                html += `<option value="${val}" ${val === sel ? 'selected' : ''}>${val}</option>`;
+            }
+            return html;
+        }
+
+        function getMinuteOptions(selectedMinute) {
+            let html = '';
+            const sel = selectedMinute ? String(selectedMinute).padStart(2, '0') : '';
+            for (let i = 0; i < 60; i++) {
+                const val = String(i).padStart(2, '0');
+                html += `<option value="${val}" ${val === sel ? 'selected' : ''}>${val}</option>`;
+            }
+            return html;
+        }
+
+        async function updateJobTimeField(jobId, field, partValue, partType) {
+            const job = allJobs.find(j => j.id === jobId);
+            if (!job) return;
+            let currentVal = job[field] || '08:00';
+            if (!currentVal.includes(':')) currentVal = '08:00';
+            const parts = currentVal.split(':');
+            let hour = parts[0];
+            let minute = parts[1];
+            
+            if (partType === 'hour') {
+                hour = partValue;
+            } else if (partType === 'minute') {
+                minute = partValue;
+            }
+            
+            const newVal = `${hour}:${minute}`;
+            await updateJobField(jobId, field, newVal);
+        }
+
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
             const lower = timeStr.toLowerCase();
@@ -3471,7 +3534,15 @@
                             <td>
                                 <div class="flex gap-2">
                                     <input type="date" value="${job.apptDate}" onchange="updateJobField('${job.id}', 'apptDate', this.value)" class="table-select text-sm w-32 border border-gray-200">
-                                    <input type="text" value="${job.apptTime}" placeholder="13:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'apptTime', this.value)" class="table-select text-sm w-24 border border-gray-200">
+                                    <div class="flex items-center gap-1">
+                                        <select onchange="updateJobTimeField('${job.id}', 'apptTime', this.value, 'hour')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                            ${getHourOptions(job.apptTime ? job.apptTime.split(':')[0] : '08')}
+                                        </select>
+                                        <span class="text-gray-400 font-bold">:</span>
+                                        <select onchange="updateJobTimeField('${job.id}', 'apptTime', this.value, 'minute')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                            ${getMinuteOptions(job.apptTime ? job.apptTime.split(':')[1] : '00')}
+                                        </select>
+                                    </div>
                                 </div>
                             </td>
                             <td>
@@ -3602,12 +3673,32 @@
 
                             <!-- Arrival -->
                             <td class="px-3 py-4">
-                                ${canEditArrival ? `<input type="text" value="${job.arrival || ''}" placeholder="13:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
+                                ${canEditArrival ? `
+                                <div class="flex items-center gap-1">
+                                    <select onchange="updateJobTimeField('${job.id}', 'arrival', this.value, 'hour')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                        ${getHourOptions(job.arrival ? job.arrival.split(':')[0] : '08')}
+                                    </select>
+                                    <span class="text-gray-400 font-bold">:</span>
+                                    <select onchange="updateJobTimeField('${job.id}', 'arrival', this.value, 'minute')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                        ${getMinuteOptions(job.arrival ? job.arrival.split(':')[1] : '00')}
+                                    </select>
+                                </div>
+                                ` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
                             </td>
                             
                             <!-- Departure -->
                             <td class="px-3 py-4">
-                                ${isEditable ? `<input type="text" value="${job.departure || ''}" placeholder="15:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
+                                ${isEditable ? `
+                                <div class="flex items-center gap-1">
+                                    <select onchange="updateJobTimeField('${job.id}', 'departure', this.value, 'hour')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                        ${getHourOptions(job.departure ? job.departure.split(':')[0] : '17')}
+                                    </select>
+                                    <span class="text-gray-400 font-bold">:</span>
+                                    <select onchange="updateJobTimeField('${job.id}', 'departure', this.value, 'minute')" class="table-select text-xs w-14 border border-gray-200 bg-white">
+                                        ${getMinuteOptions(job.departure ? job.departure.split(':')[1] : '00')}
+                                    </select>
+                                </div>
+                                ` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
                             </td>
                             
 
