@@ -104,6 +104,106 @@
         .tv-slide.hidden {
             display: none !important;
         }
+        
+        /* Sidebar transition and styles */
+        #app-sidebar {
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-collapsed {
+            width: 5rem !important; /* w-20 */
+        }
+        .sidebar-collapsed .sidebar-expand-only {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            pointer-events: none;
+            display: none !important;
+        }
+        .sidebar-collapsed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+            display: none !important;
+        }
+        .sidebar-collapsed #sidebar-footer-expanded {
+            display: none !important;
+        }
+        .sidebar-collapsed #sidebar-footer-collapsed {
+            display: flex !important;
+        }
+        .sidebar-collapsed #sidebar-toggle-icon {
+            transform: rotate(180deg);
+        }
+        .sidebar-collapsed .nav-btn {
+            justify-content: center;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        /* Top Navigation vs Sidebar hiding rules */
+        .layout-top #app-sidebar {
+            display: none !important;
+        }
+        .layout-sidebar header #dynamic-nav {
+            display: none !important;
+        }
+        .layout-sidebar header #header-logo-container {
+            display: none !important;
+        }
+
+        /* Premium Dark Sidebar styles */
+        #app-sidebar {
+            background-color: #0f172a !important; /* bg-slate-900 */
+            border-right-color: #1e293b !important; /* border-slate-800 */
+            color: #cbd5e1 !important; /* text-slate-300 */
+        }
+        #app-sidebar .bg-gray-50 {
+            background-color: #020617 !important; /* bg-slate-950 */
+        }
+        #app-sidebar .bg-gray-100\/30 {
+            background-color: #020617 !important; /* bg-slate-950 */
+        }
+        #app-sidebar .border-b, #app-sidebar .border-t {
+            border-color: #1e293b !important; /* border-slate-800 */
+        }
+        #app-sidebar .text-gray-900 {
+            color: #ffffff !important;
+        }
+        #app-sidebar .text-gray-600, #app-sidebar .text-gray-500 {
+            color: #94a3b8 !important; /* text-slate-400 */
+        }
+        #app-sidebar .nav-btn {
+            color: #cbd5e1 !important;
+            transition: all 0.2s ease;
+        }
+        #app-sidebar .nav-btn:hover {
+            background-color: #1e293b !important; /* hover:bg-slate-800 */
+            color: #ffffff !important;
+        }
+        #app-sidebar .nav-btn.bg-gray-100 {
+            background-color: #dc2626 !important; /* active: bg-red-600 */
+            color: #ffffff !important;
+        }
+        #app-sidebar button:hover {
+            background-color: #1e293b !important;
+        }
+        #sidebar-user-dropdown {
+            background-color: #1e293b !important;
+            border-color: #334155 !important;
+            color: #ffffff !important;
+        }
+        #sidebar-user-dropdown button {
+            color: #cbd5e1 !important;
+        }
+        #sidebar-user-dropdown button:hover {
+            background-color: #334155 !important;
+            color: #ffffff !important;
+        }
+        #sidebar-user-dropdown .divide-y > * + * {
+            border-color: #334155 !important;
+        }
+        #sidebar-menu-user-role {
+            color: #ef4444 !important; /* Red accent role */
+        }
     </style>
 </head>
 
@@ -330,27 +430,67 @@
                     <!-- Forgot Password Form -->
                     <div id="forgot-form-container" class="hidden space-y-6">
                         <div>
-                            <h2 class="text-2xl font-black text-gray-900 tracking-tight mb-2">Account Recovery</h2>
-                            <p class="text-sm font-bold text-gray-500 uppercase tracking-wide">Access recovery notice</p>
+                            <h2 class="text-2xl font-black text-gray-900 tracking-tight mb-2">Reset Password</h2>
+                            <p class="text-sm font-bold text-gray-500 uppercase tracking-wide">Request a code to reset
+                                your password.</p>
                         </div>
 
-                        <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-6 space-y-4 shadow-sm text-center">
-                            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-600 mb-2">
-                                <i data-lucide="shield-alert" class="w-6 h-6 animate-pulse"></i>
+                        <!-- Step 1: Request Code -->
+                        <div id="forgot-step-1" class="space-y-6">
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest mb-2">Email
+                                    Address</label>
+                                <div class="relative">
+                                    <i data-lucide="mail" class="absolute left-4 top-3.5 text-gray-400 w-4 h-4"></i>
+                                    <input type="email" id="forgot-email"
+                                        class="w-full login-input rounded-xl pl-12 pr-4 py-3.5 outline-none font-semibold text-sm transition"
+                                        placeholder="Enter registered email">
+                                </div>
                             </div>
-                            <h3 class="text-sm font-black text-red-900 uppercase tracking-wider">Self-Service Disabled</h3>
-                            <p class="text-xs font-semibold text-gray-600 leading-relaxed">
-                                For security and accountability reasons, self-service password recovery is disabled.
-                            </p>
-                            <div class="bg-white border border-gray-200 rounded-xl p-3.5 text-[11px] text-gray-700 font-bold leading-normal text-left">
-                                <span class="text-red-600 font-black uppercase block mb-1">To reset your password:</span>
-                                Please contact your workshop <strong class="text-gray-900">System Administrator</strong> or <strong class="text-gray-900">Owner</strong> to verify your identity and perform a manual account recovery.
+
+                            <button onclick="requestResetCode()"
+                                class="w-full login-btn py-4 text-white font-black uppercase rounded-xl shadow-lg shadow-gray-900/10 text-sm tracking-widest flex items-center justify-center gap-2">
+                                Send Reset Code <i data-lucide="mail-check" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <!-- Step 2: Enter Code & New Password -->
+                        <div id="forgot-step-2" class="hidden space-y-6">
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest mb-2">Reset
+                                    Code (OTP)</label>
+                                <div class="relative">
+                                    <i data-lucide="key-round"
+                                        class="absolute left-4 top-3.5 text-gray-400 w-4 h-4"></i>
+                                    <input type="text" id="reset-token"
+                                        class="w-full login-input rounded-xl pl-12 pr-4 py-3.5 outline-none font-semibold text-sm transition font-mono tracking-widest text-center"
+                                        placeholder="Enter 6-digit code">
+                                </div>
                             </div>
+
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-gray-700 uppercase tracking-widest mb-2">New
+                                    Password</label>
+                                <div class="relative">
+                                    <i data-lucide="lock" class="absolute left-4 top-3.5 text-gray-400 w-4 h-4"></i>
+                                    <input type="password" id="reset-new-pass"
+                                        class="w-full login-input rounded-xl pl-12 pr-4 py-3.5 outline-none font-semibold text-sm transition"
+                                        placeholder="Enter new password">
+                                </div>
+                            </div>
+
+                            <button onclick="submitNewPassword()"
+                                class="w-full login-btn py-4 text-white font-black uppercase rounded-xl shadow-lg shadow-gray-900/10 text-sm tracking-widest flex items-center justify-center gap-2">
+                                Reset Password <i data-lucide="check" class="w-4 h-4"></i>
+                            </button>
                         </div>
 
                         <div class="text-center pt-2">
                             <button onclick="toggleForgotForm(false)"
-                                class="w-full bg-gray-900 text-white font-black rounded-xl px-4 py-3.5 hover:bg-gray-800 transition shadow-sm text-xs uppercase tracking-widest">
+                                class="text-xs font-bold text-gray-500 hover:text-gray-700 transition uppercase tracking-widest">
                                 Back to Login
                             </button>
                         </div>
@@ -364,25 +504,119 @@
     </div>
 
     <!-- Application Shell -->
-    <div id="app-shell" class="hidden flex flex-col h-full bg-gray-100">
+    <div id="app-shell" class="hidden flex h-full bg-gray-100 overflow-hidden layout-sidebar">
 
-        <header
-            class="bg-white shadow-md z-50 flex h-20 items-center justify-between border-b border-gray-200 shrink-0">
-            <div class="h-full bg-red-600 text-white flex items-center pl-8 pr-16 slanted-logo-bg shadow-inner">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="wrench" class="w-6 h-6"></i>
-                    <div class="flex flex-col">
+        <!-- Left Sidebar (Google Chat style) -->
+        <aside id="app-sidebar" class="bg-gray-50 border-r border-gray-200 flex flex-col h-full transition-all duration-300 w-64 select-none shrink-0">
+            <!-- Sidebar Header / Logo -->
+            <div class="h-20 flex items-center justify-between px-6 border-b border-gray-200 shrink-0 bg-gray-50">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <!-- Sidebar Logo -->
+                    <div class="shrink-0 flex items-center justify-center w-8 h-8 text-red-600">
+                        <i data-lucide="wrench" class="w-8 h-8"></i>
+                    </div>
+                    <div class="flex flex-col sidebar-expand-only transition-all duration-300">
                         <div class="flex items-baseline gap-2">
-                            <span class="font-black italic uppercase tracking-tighter text-2xl leading-none block drop-shadow-md">HonTech</span>
-                            <span class="text-[10px] font-bold tracking-wider text-red-200 bg-red-800/30 px-1.5 py-0.5 rounded border border-red-500/30">v1.0.0-beta</span>
+                            <span class="font-black italic uppercase tracking-tighter text-xl leading-none text-gray-900">HonTech</span>
+                            <span class="text-[9px] font-bold tracking-wider text-red-600 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">v1.0</span>
                         </div>
                     </div>
                 </div>
+                <!-- Collapse Button -->
+                <button onclick="toggleSidebar()" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 focus:outline-none transition sidebar-expand-only">
+                    <i data-lucide="chevrons-left" id="sidebar-toggle-icon" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleSidebar()" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 focus:outline-none transition hidden sidebar-collapsed-only" id="sidebar-expand-btn">
+                    <i data-lucide="chevrons-right" class="w-4 h-4"></i>
+                </button>
             </div>
+
+            <!-- Sidebar Navigation Content -->
+            <div class="flex-1 overflow-y-auto py-6 px-4 space-y-6">
+                <!-- Main Nav Links -->
+                <nav id="sidebar-dynamic-nav" class="space-y-1.5"></nav>
+            </div>
+
+            <!-- Sidebar Footer (User info & Settings) -->
+            <div class="p-4 border-t border-gray-200 bg-gray-100/30 shrink-0 relative">
+                <!-- Sidebar Dropdown Menu (Pops up) -->
+                <div id="sidebar-user-dropdown" class="hidden absolute left-4 bottom-16 w-56 bg-white rounded-2xl border border-gray-200 shadow-xl z-[999] py-4 divide-y divide-gray-100">
+                    <!-- Navigation Layout Section -->
+                    <div class="px-5 py-3">
+                        <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Navigation Layout</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="setLayout('sidebar')" id="sidebar-layout-btn-sidebar" class="flex-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition text-center hover:bg-gray-50 bg-gray-50 border-gray-300 text-gray-900">Sidebar</button>
+                            <button onclick="setLayout('top')" id="sidebar-layout-btn-top" class="flex-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition text-center hover:bg-gray-50 bg-white border-gray-200 text-gray-700">Top Bar</button>
+                        </div>
+                    </div>
+
+                    <!-- Account Settings Link -->
+                    <div class="px-3 py-2">
+                        <button onclick="showSection('settings'); toggleSidebarDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                            <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+                            Account Settings
+                        </button>
+                    </div>
+
+                    <!-- Sign Out Action -->
+                    <div class="px-3 py-2">
+                        <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Collapsed View footer -->
+                <div id="sidebar-footer-collapsed" class="hidden flex flex-col items-center gap-4">
+                    <button onclick="toggleSidebarDropdown()" class="w-10 h-10 rounded-full bg-red-100 text-red-600 border border-red-200 flex items-center justify-center font-bold" title="Settings">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="toggleSidebarDropdown()" class="p-2 rounded-lg hover:bg-gray-200 text-gray-600" title="Settings">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <!-- Expanded View footer -->
+                <div id="sidebar-footer-expanded" class="flex items-center justify-between gap-3">
+                    <button onclick="toggleSidebarDropdown()" class="flex flex-1 items-center gap-3 min-w-0 text-left hover:opacity-90 transition">
+                        <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 border border-red-200 flex items-center justify-center font-bold shrink-0">
+                            <i data-lucide="user" class="w-5 h-5"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-xs font-black text-gray-900" id="sidebar-menu-user-name">User</p>
+                            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest" id="sidebar-menu-user-role">Role</p>
+                        </div>
+                    </button>
+                    <button onclick="toggleSidebarDropdown()" class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 focus:outline-none transition shrink-0">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Wrapper -->
+        <div id="app-main-wrapper" class="flex-1 flex flex-col h-full overflow-hidden">
+
+            <header
+                class="bg-white shadow-md z-50 flex h-20 items-center justify-between border-b border-gray-200 shrink-0">
+                <div id="header-logo-container" class="h-full bg-red-600 text-white flex items-center pl-8 pr-16 slanted-logo-bg shadow-inner">
+                    <div class="flex items-center gap-3">
+                        <!-- Header Brand Logo -->
+                        <div class="shrink-0 flex items-center justify-center w-6 h-6 text-white">
+                            <i data-lucide="wrench" class="w-6 h-6"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <div class="flex items-baseline gap-2">
+                                <span class="font-black italic uppercase tracking-tighter text-2xl leading-none block drop-shadow-md">HonTech</span>
+                                <span class="text-[10px] font-bold tracking-wider text-red-200 bg-red-800/30 px-1.5 py-0.5 rounded border border-red-500/30">v1.0.0-beta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             <nav id="dynamic-nav" class="flex flex-1 items-center px-6 gap-2 md:gap-4 overflow-x-auto"></nav>
 
-            <div class="flex items-center gap-6 px-8 border-l border-gray-100 h-full">
+            <div id="header-user-section" class="flex items-center gap-6 px-8 border-l border-gray-100 h-full">
                 <div id="header-status"
                     class="hidden md:flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -403,21 +637,29 @@
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div id="user-dropdown" class="hidden absolute right-0 mt-3 w-64 bg-white rounded-2xl border border-gray-200 shadow-xl z-[999] py-4 divide-y divide-gray-100">
-                        <!-- User Info -->
-                        <div class="px-5 pb-3">
-                            <p class="text-sm font-black text-gray-900" id="dropdown-user-name">User</p>
-                            <p class="text-xs font-semibold text-gray-500 truncate mb-1" id="dropdown-user-email">Sa@hontech.com</p>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-red-50 text-red-600 border border-red-100" id="dropdown-user-role">
-                                Role
-                            </span>
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl border border-gray-200 shadow-xl z-[999] py-4 divide-y divide-gray-100">
+                        <!-- Navigation Layout Section -->
+                        <div class="px-5 py-3">
+                            <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400 mb-2">Navigation Layout</span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="setLayout('sidebar')" id="layout-btn-sidebar" class="flex-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition text-center hover:bg-gray-50 bg-gray-50 border-gray-300 text-gray-900">Sidebar</button>
+                                <button onclick="setLayout('top')" id="layout-btn-top" class="flex-1 px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition text-center hover:bg-gray-50 bg-white border-gray-200 text-gray-700">Top Bar</button>
+                            </div>
                         </div>
 
-                        <!-- Sign Out Action (Simplified, Simple and Practical) -->
-                        <div class="px-3 pt-3">
-                            <button onclick="handleLogout()" class="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-white bg-red-600 hover:bg-red-750 transition duration-205 shadow-md shadow-red-600/10">
+                        <!-- Account Settings Link -->
+                        <div class="px-3 py-2">
+                            <button onclick="showSection('settings'); toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                                <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+                                Account Settings
+                            </button>
+                        </div>
+
+                        <!-- Sign Out Action -->
+                        <div class="px-3 py-2">
+                            <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition">
                                 <i data-lucide="log-out" class="w-4 h-4"></i>
-                                Log Out
+                                Sign Out
                             </button>
                         </div>
                     </div>
@@ -952,7 +1194,7 @@
                             <label
                                 class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-1 block">Contact
                                 Number</label>
-                            <input type="text" id="intake-contact" placeholder="09XX-XXX-XXXX" oninput="formatContactNumber(this)"
+                            <input type="text" id="intake-contact" placeholder="09XX-XXX-XXXX"
                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
                         </div>
                         <div class="md:col-span-2">
@@ -1094,14 +1336,14 @@
                                     class="w-5 h-5"></i></div>
                             <div>
                                 <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes
-                                    Table - Marikina</h3>
+                                    Table</h3>
                                 <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active
                                     Vehicles in Workshop</p>
                             </div>
                         </div>
                     </div>
                     <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll">
-                        <table class="w-full text-left whitespace-nowrap min-w-[1650px]">
+                        <table class="w-full text-left whitespace-nowrap min-w-[800px]">
                             <thead>
                                 <tr>
                                     <th>Claim Stub</th>
@@ -1865,6 +2107,7 @@
 
         </main>
     </div>
+</div>
 
     <!-- Alert Toast Component -->
     <div id="toast"
@@ -2270,6 +2513,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             initTheme();
+            initLayout();
             const urlParams = new URLSearchParams(window.location.search);
             const isTVMode = urlParams.get('mode') === 'tv';
 
@@ -2424,18 +2668,32 @@
 
         function buildNavbar(role) {
             const nav = document.getElementById('dynamic-nav');
+            const sidebarNav = document.getElementById('sidebar-dynamic-nav');
             let navHTML = '';
+            let sidebarNavHTML = '';
             let defaultView = 'queue';
 
-            document.getElementById('sidebar-user-name').innerText = currentUserName || 'System User';
+            const userDisplayName = currentUserName || 'System User';
+            const userRoleLabel = getRoleLabel(role);
+
+            if (document.getElementById('sidebar-user-name')) {
+                document.getElementById('sidebar-user-name').innerText = userDisplayName;
+            }
+            if (document.getElementById('sidebar-menu-user-name')) {
+                document.getElementById('sidebar-menu-user-name').innerText = userDisplayName;
+            }
+            if (document.getElementById('sidebar-menu-user-role')) {
+                document.getElementById('sidebar-menu-user-role').innerText = userRoleLabel;
+            }
+
             if (document.getElementById('dropdown-user-name')) {
-                document.getElementById('dropdown-user-name').innerText = currentUserName || 'System User';
+                document.getElementById('dropdown-user-name').innerText = userDisplayName;
             }
             if (document.getElementById('dropdown-user-email')) {
                 document.getElementById('dropdown-user-email').innerText = currentUserEmail || 'user@hontech.com';
             }
             if (document.getElementById('dropdown-user-role')) {
-                document.getElementById('dropdown-user-role').innerText = getRoleLabel(role);
+                document.getElementById('dropdown-user-role').innerText = userRoleLabel;
             }
 
             if (role === 'owner') {
@@ -2443,8 +2701,10 @@
                 document.getElementById('header-actions').classList.remove('hidden');
 
                 navHTML += `<button onclick="showSection('dashboard', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="pie-chart" class="w-4 h-4"></i> Analytics</button>`;
-                navHTML += `<button onclick="showSection('staff', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i> Staff Access</button>`;
                 navHTML += `<button onclick="showSection('queue', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> Records</button>`;
+
+                sidebarNavHTML += `<button onclick="showSection('dashboard', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="pie-chart" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Analytics</span></button>`;
+                sidebarNavHTML += `<button onclick="showSection('queue', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="database" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Records</span></button>`;
 
                 defaultView = 'dashboard';
             }
@@ -2455,6 +2715,9 @@
                 navHTML += `<button onclick="showSection('staff', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="users" class="w-4 h-4"></i> Staff Access</button>`;
                 navHTML += `<button onclick="showSection('queue', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="database" class="w-4 h-4"></i> Records</button>`;
 
+                sidebarNavHTML += `<button onclick="showSection('staff', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="users" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Staff Access</span></button>`;
+                sidebarNavHTML += `<button onclick="showSection('queue', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="database" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Records</span></button>`;
+
                 defaultView = 'staff';
             }
             else if (role === 'assistant') {
@@ -2464,6 +2727,10 @@
                 navHTML += `<button onclick="showSection('intake', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="calendar-plus" class="w-4 h-4"></i> Online Booking</button>`;
                 navHTML += `<button onclick="showSection('queue', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="list-todo" class="w-4 h-4"></i> Master Queue</button>`;
                 navHTML += `<button onclick="launchTVMode()" class="px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 text-gray-500 flex items-center gap-2"><i data-lucide="monitor" class="w-4 h-4"></i> TV Monitor</button>`;
+
+                sidebarNavHTML += `<button onclick="showSection('intake', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="calendar-plus" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Online Booking</span></button>`;
+                sidebarNavHTML += `<button onclick="showSection('queue', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="list-todo" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Master Queue</span></button>`;
+                sidebarNavHTML += `<button onclick="launchTVMode()" class="w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-500"><i data-lucide="monitor" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">TV Monitor</span></button>`;
 
                 setupIntakeForm('assistant');
                 defaultView = 'intake';
@@ -2476,15 +2743,27 @@
                 navHTML += `<button onclick="showSection('queue', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="clipboard-list" class="w-4 h-4"></i> Daily Intakes</button>`;
                 navHTML += `<button onclick="launchTVMode()" class="px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 text-gray-500 flex items-center gap-2"><i data-lucide="monitor" class="w-4 h-4"></i> TV Monitor</button>`;
 
+                sidebarNavHTML += `<button onclick="showSection('intake', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="user-plus" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Walk-In Form</span></button>`;
+                sidebarNavHTML += `<button onclick="showSection('queue', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="clipboard-list" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">Daily Intakes</span></button>`;
+                sidebarNavHTML += `<button onclick="launchTVMode()" class="w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-500"><i data-lucide="monitor" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">TV Monitor</span></button>`;
+
                 setupIntakeForm('sa');
                 defaultView = 'intake';
             }
 
-            nav.innerHTML = navHTML;
-            lucide.createIcons();
+            // Append Profile button for all roles
+            navHTML += `<button onclick="showSection('profile', this)" class="nav-btn px-4 py-2 rounded-lg font-bold transition hover:bg-gray-100 flex items-center gap-2"><i data-lucide="user-cog" class="w-4 h-4"></i> My Profile</button>`;
+            sidebarNavHTML += `<button onclick="showSection('profile', this)" class="nav-btn w-full px-3 py-2.5 rounded-xl font-semibold transition hover:bg-gray-100 flex items-center gap-3 text-gray-600"><i data-lucide="user-cog" class="w-5 h-5 shrink-0"></i><span class="nav-text truncate">My Profile</span></button>`;
+
+            if (nav) nav.innerHTML = navHTML;
+            if (sidebarNav) sidebarNav.innerHTML = sidebarNavHTML;
+
+            initLayout();
 
             setTimeout(() => {
-                const firstBtn = nav.querySelector('.nav-btn');
+                const savedLayout = localStorage.getItem('hontech-layout') || 'sidebar';
+                const activeNav = (savedLayout === 'sidebar') ? sidebarNav : nav;
+                const firstBtn = activeNav ? activeNav.querySelector('.nav-btn') : null;
                 if (firstBtn) showSection(defaultView, firstBtn);
                 else showSection(defaultView);
             }, 50);
@@ -2508,6 +2787,8 @@
 
             const dropdown = document.getElementById('user-dropdown');
             if (dropdown) dropdown.classList.add('hidden');
+            const sDropdown = document.getElementById('sidebar-user-dropdown');
+            if (sDropdown) sDropdown.classList.add('hidden');
         }
 
         function toggleUserDropdown() {
@@ -2522,6 +2803,13 @@
                 const btn = dropdown.previousElementSibling;
                 if (btn && !btn.contains(e.target) && !dropdown.contains(e.target)) {
                     dropdown.classList.add('hidden');
+                }
+            }
+            const sDropdown = document.getElementById('sidebar-user-dropdown');
+            if (sDropdown && !sDropdown.classList.contains('hidden')) {
+                const parent = sDropdown.parentElement;
+                if (parent && !parent.contains(e.target)) {
+                    sDropdown.classList.add('hidden');
                 }
             }
         });
@@ -2552,19 +2840,133 @@
             setTheme(savedTheme);
         }
 
+        function toggleSidebar() {
+            const sidebar = document.getElementById('app-sidebar');
+            const toggleIcon = document.getElementById('sidebar-toggle-icon');
+            const expandBtn = document.getElementById('sidebar-expand-btn');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                localStorage.setItem('hontech-sidebar-collapsed', 'true');
+                if (expandBtn) expandBtn.classList.remove('hidden');
+            } else {
+                localStorage.setItem('hontech-sidebar-collapsed', 'false');
+                if (expandBtn) expandBtn.classList.add('hidden');
+            }
+        }
+
+        function setLayout(layout) {
+            const shell = document.getElementById('app-shell');
+            const logo = document.getElementById('header-logo-container');
+            const nav = document.getElementById('dynamic-nav');
+            const userSec = document.getElementById('header-user-section');
+            
+            const btnSidebar1 = document.getElementById('layout-btn-sidebar');
+            const btnTop1 = document.getElementById('layout-btn-top');
+            const btnSidebar2 = document.getElementById('sidebar-layout-btn-sidebar');
+            const btnTop2 = document.getElementById('sidebar-layout-btn-top');
+            
+            const sidebars = [btnSidebar1, btnSidebar2];
+            const tops = [btnTop1, btnTop2];
+            
+            if (layout === 'sidebar') {
+                shell.classList.remove('layout-top');
+                shell.classList.add('layout-sidebar');
+                localStorage.setItem('hontech-layout', 'sidebar');
+                
+                if (logo) logo.classList.add('hidden');
+                if (nav) nav.classList.add('hidden');
+                
+                if (userSec) {
+                    userSec.style.setProperty('margin-left', 'auto', 'important');
+                    userSec.style.setProperty('margin-right', '0', 'important');
+                    userSec.style.removeProperty('border-left');
+                    userSec.style.removeProperty('padding-left');
+                }
+                
+                sidebars.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('bg-gray-50', 'border-gray-300', 'text-gray-900');
+                        btn.classList.remove('bg-white', 'border-gray-200', 'text-gray-700');
+                    }
+                });
+                tops.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('bg-white', 'border-gray-200', 'text-gray-700');
+                        btn.classList.remove('bg-gray-50', 'border-gray-300', 'text-gray-900');
+                    }
+                });
+            } else {
+                shell.classList.remove('layout-sidebar');
+                shell.classList.add('layout-top');
+                localStorage.setItem('hontech-layout', 'top');
+                
+                if (logo) logo.classList.remove('hidden');
+                if (nav) nav.classList.remove('hidden');
+                
+                if (userSec) {
+                    userSec.style.removeProperty('margin-left');
+                    userSec.style.removeProperty('margin-right');
+                    userSec.style.removeProperty('border-left');
+                    userSec.style.removeProperty('padding-left');
+                }
+                
+                tops.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('bg-gray-50', 'border-gray-300', 'text-gray-900');
+                        btn.classList.remove('bg-white', 'border-gray-200', 'text-gray-700');
+                    }
+                });
+                sidebars.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('bg-white', 'border-gray-200', 'text-gray-700');
+                        btn.classList.remove('bg-gray-50', 'border-gray-300', 'text-gray-900');
+                    }
+                });
+            }
+            window.dispatchEvent(new Event('resize'));
+        }
+
+        function toggleSidebarDropdown() {
+            const dropdown = document.getElementById('sidebar-user-dropdown');
+            if (dropdown) dropdown.classList.toggle('hidden');
+        }
+
+        function initLayout() {
+            const savedLayout = localStorage.getItem('hontech-layout') || 'sidebar';
+            setLayout(savedLayout);
+            
+            const savedCollapsed = localStorage.getItem('hontech-sidebar-collapsed');
+            const sidebar = document.getElementById('app-sidebar');
+            const expandBtn = document.getElementById('sidebar-expand-btn');
+            if (savedCollapsed === 'true' && sidebar) {
+                sidebar.classList.add('sidebar-collapsed');
+                if (expandBtn) expandBtn.classList.remove('hidden');
+            }
+        }
+
         function showSection(id, btnElement) {
             document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
             const targetSec = document.getElementById(`section-${id}`);
             if (targetSec) targetSec.classList.remove('hidden');
 
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-red-50', 'text-red-600');
+                btn.classList.remove('bg-red-50', 'text-red-600', 'bg-gray-100', 'text-gray-900');
                 btn.classList.add('text-gray-600');
             });
-            if (btnElement) {
-                btnElement.classList.add('bg-red-50', 'text-red-600');
-                btnElement.classList.remove('text-gray-600');
-            }
+            
+            // Highlight matching buttons in both layouts
+            const matchingBtns = document.querySelectorAll(`.nav-btn[onclick*="showSection('${id}'"]`);
+            matchingBtns.forEach(btn => {
+                if (btn.closest('#app-sidebar')) {
+                    btn.classList.add('bg-gray-100', 'text-gray-900');
+                    btn.classList.remove('text-gray-600');
+                } else {
+                    btn.classList.add('bg-red-50', 'text-red-600');
+                    btn.classList.remove('text-gray-600');
+                }
+            });
 
             const titles = {
                 'dashboard': 'Analytics Overview',
@@ -2582,6 +2984,24 @@
             if (id === 'queue') renderStaffTables();
             if (id === 'staff') renderStaffManagement();
             if (id === 'profile') loadUserProfile();
+            
+            if (id === 'tv') {
+                (async () => {
+                    try {
+                        await loadData();
+                        renderTV();
+                    } catch (e) {
+                        console.error('Error loading TV monitor:', e);
+                    }
+                })();
+                if (tvInterval) clearInterval(tvInterval);
+                tvInterval = setInterval(rotateTVSlides, 15000);
+            } else {
+                if (tvInterval) {
+                    clearInterval(tvInterval);
+                    tvInterval = null;
+                }
+            }
         }
 
         function getRoleLabel(roleId) {
@@ -2613,8 +3033,8 @@
                         </div>
                     </td>
                     <td>
-                        ${user.role === 'owner'
-                    ? `<span class="px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-800">System Owner</span>`
+                        ${user.role === 'owner' && user.email === 'owner@hontech.com'
+                    ? `<span class="px-2 py-1 rounded text-[10px] font-black uppercase tracking-widest bg-red-100 text-red-800">Primary Administrator</span>`
                     : `
                             <select onchange="updateStaffRole('${user._id}', this.value)" class="bg-gray-50 border border-gray-200 rounded-lg px-2 py-1 font-bold text-xs text-gray-900 outline-none focus:border-red-600 transition cursor-pointer">
                                 <option value="assistant" ${user.role === 'assistant' ? 'selected' : ''}>Assistant Staff</option>
@@ -2630,16 +3050,14 @@
                         <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider ${user.isActive ? 'bg-green-50 text-green-600 border border-green-200' : 'bg-gray-100 text-gray-500 border border-gray-200'}">${user.isActive ? 'Active' : 'Suspended'}</span>
                     </td>
                     <td>
-                        ${user.role === 'owner'
-                    ? (currentUserRole === 'admin'
-                        ? '<span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Secured</span>'
-                        : `<button onclick="openStaffPasswordReset('${user._id}', '${user.name}')" class="bg-white hover:bg-gray-50 text-gray-700 px-2 py-1 rounded-lg border border-gray-200 transition text-[9px] font-black uppercase tracking-widest flex items-center gap-1 shadow-sm"><i data-lucide="key-round" class="w-3 h-3 text-red-600"></i> Reset</button>`)
+                        ${user.role === 'owner' && user.email === 'owner@hontech.com'
+                    ? '<span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Secured</span>'
                     : `<button onclick="openStaffPasswordReset('${user._id}', '${user.name}')" class="bg-white hover:bg-gray-50 text-gray-700 px-2 py-1 rounded-lg border border-gray-200 transition text-[9px] font-black uppercase tracking-widest flex items-center gap-1 shadow-sm"><i data-lucide="key-round" class="w-3 h-3 text-red-600"></i> Reset</button>`
                 }
                     </td>
                     <td class="text-right">
                         <div class="flex gap-2 justify-end">
-                            ${user.role === 'owner'
+                            ${user.role === 'owner' && user.email === 'owner@hontech.com'
                     ? '<span class="text-[10px] text-gray-400 font-black uppercase tracking-widest">Sys Owner</span>'
                     : `
                                 <button onclick="toggleStaffActive('${user._id}', ${!user.isActive})" class="bg-white p-2 rounded-lg border border-gray-200 shadow-sm transition ${user.isActive ? 'text-amber-500 hover:bg-amber-50' : 'text-green-600 hover:bg-green-50'}" title="${user.isActive ? 'Suspend Access' : 'Restore Access'}">
@@ -2972,21 +3390,6 @@
             return phone;
         }
 
-        function formatContactNumber(input) {
-            let value = input.value.replace(/\D/g, '');
-            let formatted = '';
-            if (value.length > 0) {
-                formatted += value.substring(0, 4);
-            }
-            if (value.length > 4) {
-                formatted += '-' + value.substring(4, 7);
-            }
-            if (value.length > 7) {
-                formatted += '-' + value.substring(7, 11);
-            }
-            input.value = formatted;
-        }
-
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
             if (timeStr.includes('AM') || timeStr.includes('PM') || timeStr.includes('am') || timeStr.includes('pm')) {
@@ -3074,7 +3477,7 @@
                                 <input type="checkbox" ${job.confirmed ? 'checked' : ''} onchange="updateCheckbox('${job.id}', 'confirmed', this.checked)">
                             </td>
                             <td>
-                                <input type="text" value="${job.concern || ''}" onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-xs w-36 border border-gray-200 bg-white" placeholder="Type action..." title="Only Assistant can edit action details prior to master queue push.">
+                                <input type="text" value="${job.remarks || ''}" onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-xs w-36 border border-gray-200 bg-white" placeholder="Type action..." title="Only Assistant can edit action details prior to master queue push.">
                             </td>
                             <td class="text-right flex items-center justify-end gap-2">
                                 <button onclick="setJobStatus('${job.id}', 'Waiting')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold uppercase transition shadow-sm">Push Active</button>
@@ -3105,7 +3508,7 @@
                                 <span class="text-xs font-bold ${job.confirmed ? 'text-green-600' : 'text-gray-400'}">${job.confirmed ? 'Yes' : 'No'}</span>
                             </td>
                             <td>
-                                <span class="text-xs text-gray-700 font-medium">${job.concern || '-'}</span>
+                                <span class="text-xs text-gray-700 font-medium">${job.remarks || '-'}</span>
                             </td>
                             <td class="text-right text-gray-400 text-xs italic">
                                 Read-Only
@@ -3128,17 +3531,16 @@
                                 <th class="px-3 py-3.5 bg-gray-50">Claim Stub</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Plate No.</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Model & Category</th>
-                                <th class="px-3 py-3.5 bg-gray-50">Date</th>
+                                <th class="px-3 py-3.5 bg-gray-50">Branch</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Source</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Arrival</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Departure</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Parts</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Evaluation / Diagnosis</th>
-                                <th class="px-3 py-3.5 bg-gray-50">Waiting for Approval</th>
+                                <th class="px-3 py-3.5 bg-gray-50">GRS Recommendation</th>
                                 ${showGoal ? '<th class="px-3 py-3.5 bg-gray-50">SLA Status (2h)</th>' : ''}
                                 <th class="px-3 py-3.5 bg-gray-50">Status</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Location</th>
-                                <th class="px-3 py-3.5 bg-gray-50">Promised Date</th>
                                 <th class="px-3 py-3.5 bg-gray-50">Remarks / Reasons</th>
                                 <th class="px-3 py-3.5 text-right w-44 bg-gray-50">Action</th>
                             </tr>
@@ -3162,60 +3564,48 @@
                         return `
                         <tr class="${job.status === 'Ready' ? 'bg-green-50/50' : job.status === 'Released' ? 'bg-gray-50/80' : ''}">
                             <!-- Claim Stub -->
-                            <td class="px-3 py-4" style="min-width: 120px;"><span class="font-mono text-gray-500 font-bold text-sm bg-gray-100 px-2 py-1 rounded">${job.claimStub || 'N/A'}</span></td>
+                            <td class="px-3 py-4"><span class="font-mono text-gray-500 font-bold text-sm bg-gray-100 px-2 py-1 rounded">${job.claimStub || 'N/A'}</span></td>
                             
                             <!-- Plate -->
-                            <td class="px-3 py-4" style="min-width: 110px;"><span class="font-black italic text-gray-900 text-lg">${job.plate}</span></td>
+                            <td class="px-3 py-4"><span class="font-black italic text-gray-900 text-lg">${job.plate}</span></td>
                             
                             <!-- Model & Category -->
-                            <td class="px-3 py-4" style="min-width: 220px;">
+                            <td class="px-3 py-4">
                                 <div class="font-bold text-gray-900">${job.vehicle}</div>
+                                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">${job.category} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
                                 ${isEditable ? `
-                                <div class="flex flex-col gap-1 mt-1">
-                                    <select onchange="updateJobField('${job.id}', 'category', this.value)" class="table-select text-[10px] font-bold uppercase w-full border border-gray-200 bg-white cursor-pointer">
-                                        <option value="PMS" ${job.category === 'PMS' ? 'selected' : ''}>PMS</option>
-                                        <option value="GRS" ${job.category === 'GRS' ? 'selected' : ''}>GRS</option>
-                                        <option value="PMS AND GRS" ${job.category === 'PMS AND GRS' ? 'selected' : ''}>PMS & GRS</option>
-                                        <option value="Others" ${job.category !== 'PMS' && job.category !== 'GRS' && job.category !== 'PMS AND GRS' ? 'selected' : ''}>Others</option>
-                                    </select>
-                                    <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-[10px] font-bold uppercase w-full border border-gray-200 bg-white cursor-pointer mt-1">
-                                        <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
-                                        <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
-                                        <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
-                                    </select>
-                                </div>
+                                <select onchange="updateJobField('${job.id}', 'laneType', this.value)" class="table-select text-[10px] font-bold uppercase w-36 border border-gray-200 bg-white cursor-pointer block mt-1">
+                                    <option value="Flexible (Ordinary)" ${job.laneType === 'Flexible (Ordinary)' ? 'selected' : ''}>Flexible (Ordinary)</option>
+                                    <option value="Express Lane" ${job.laneType === 'Express Lane' ? 'selected' : ''}>Express Lane</option>
+                                    <option value="Special Lane" ${job.laneType === 'Special Lane' ? 'selected' : ''}>Special Lane</option>
+                                </select>
                                 ` : `
-                                <div class="text-[10px] text-gray-500 font-bold uppercase mb-1">${job.category || 'N/A'} ${job.saName ? `| SA: ${job.saName}` : '| Unassigned'}</div>
                                 <div class="text-[10px] text-red-600 font-bold uppercase mt-1">Lane: ${job.laneType || 'Flexible (Ordinary)'}</div>
                                 `}
                             </td>
                             
-                            <!-- Date (Scheduled/Received) -->
-                            <td class="px-3 py-4" style="min-width: 140px;">
-                                ${isEditable ? `
-                                <input type="date" value="${job.dateReceived || ''}" onchange="updateJobField('${job.id}', 'dateReceived', this.value)" class="table-select text-xs w-full border border-gray-200 bg-white">
-                                ` : `<span class="text-xs font-semibold text-gray-700">${job.dateReceived || ''}</span>`}
-                            </td>
+                            <!-- Branch -->
+                            <td class="px-3 py-4"><span class="text-xs font-semibold text-gray-700">${job.branch || 'Branch A'}</span></td>
                             
                             <!-- Source -->
-                            <td class="px-3 py-4" style="min-width: 100px;">
-                                <span class="px-2.5 py-0.5 rounded text-[10px] font-black uppercase ${job.source === 'Online' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">${job.source || 'Walk-in'}</span>
+                            <td class="px-3 py-4">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase ${job.source === 'Online' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}">${job.source || 'Walk-in'}</span>
                             </td>
 
                             <!-- Arrival -->
-                            <td class="px-3 py-4" style="min-width: 110px;">
-                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-full border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${job.arrival ? formatTime12Hour(job.arrival) : '--:--'}</span>`}
+                            <td class="px-3 py-4">
+                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
                             </td>
                             
                             <!-- Departure -->
-                            <td class="px-3 py-4" style="min-width: 110px;">
-                                ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-full border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${job.departure ? formatTime12Hour(job.departure) : '--:--'}</span>`}
+                            <td class="px-3 py-4">
+                                ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
                             </td>
                             
                             <!-- Parts -->
-                            <td class="px-3 py-4" style="min-width: 120px;">
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
+                                <select onchange="updateJobField('${job.id}', 'partsAvailable', this.value)" class="table-select font-bold text-xs uppercase w-28 border border-gray-200 bg-white" style="${job.partsAvailable === 'Yes' ? 'color:#10b981' : job.partsAvailable === 'No' ? 'color:#ef4444' : job.partsAvailable === 'WCA' ? 'color:#f97316' : 'color:#6b7280'}">
                                     <option value="Pending" ${job.partsAvailable === 'Pending' ? 'selected' : ''}>Pending</option>
                                     <option value="Yes" ${job.partsAvailable === 'Yes' ? 'selected' : ''}>Yes</option>
                                     <option value="No" ${job.partsAvailable === 'No' ? 'selected' : ''}>No</option>
@@ -3225,22 +3615,54 @@
                             </td>
                             
                             <!-- Evaluation / Diagnosis -->
-                            <td class="px-3 py-4" style="min-width: 180px;">
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <input type="text" value="${job.evaluation || ''}" placeholder="Diagnosis..." onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white">
+                                <input type="text" value="${job.evaluation || ''}" placeholder="Diagnosis..." onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white">
                                 ` : `<span class="text-sm font-medium text-gray-600">${job.evaluation || '-'}</span>`}
                             </td>
 
-                            <!-- Waiting for Approval -->
-                            <td class="px-3 py-4" style="min-width: 200px;">
+                            <!-- GRS Recommendation -->
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <input type="text" value="${job.recommendationNotes || ''}" placeholder="Type approval item..." onchange="updateJobField('${job.id}', 'recommendationNotes', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white py-1">
-                                ` : `<span class="text-sm font-medium text-gray-600">${job.recommendationNotes || '-'}</span>`}
+                                <div class="flex flex-col gap-1.5 w-40">
+                                    <select onchange="updateJobField('${job.id}', 'recommendation', this.value)" class="table-select font-bold text-xs uppercase border border-gray-200 bg-white" style="${job.recommendation === 'Approved' ? 'color:#10b981' : job.recommendation === 'Declined' ? 'color:#ef4444' : job.recommendation === 'Pending Approval' ? 'color:#f97316' : 'color:#6b7280'}">
+                                        <option value="None" ${job.recommendation === 'None' ? 'selected' : ''}>None</option>
+                                        <option value="Pending Approval" ${job.recommendation === 'Pending Approval' ? 'selected' : ''}>Pending Approval</option>
+                                        <option value="Approved" ${job.recommendation === 'Approved' ? 'selected' : ''}>Approved</option>
+                                        <option value="Declined" ${job.recommendation === 'Declined' ? 'selected' : ''}>Declined</option>
+                                    </select>
+                                    <input type="text" value="${job.recommendationNotes || ''}" placeholder="Rec Notes..." onchange="updateJobField('${job.id}', 'recommendationNotes', this.value)" class="table-select text-xs text-gray-900 border border-gray-200 bg-white py-0.5">
+                                    ${job.recommendation === 'Pending Approval' ? `
+                                    <div class="flex flex-col gap-1 mt-1">
+                                        <span class="animate-pulse bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center font-semibold">PENDING CLIENT OK</span>
+                                        <div class="flex gap-1 justify-center">
+                                            <button onclick="approveGRS('${job.id}')" class="bg-green-600 hover:bg-green-700 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase transition">Approve GRS</button>
+                                            <button onclick="declineGRS('${job.id}')" class="bg-red-650 hover:bg-red-700 text-white px-1.5 py-0.5 rounded text-[9px] font-bold uppercase transition">Decline GRS</button>
+                                        </div>
+                                    </div>
+                                    ` : job.recommendation === 'Approved' ? `
+                                    <span class="bg-green-100 text-green-700 border border-green-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Approved</span>
+                                    ` : job.recommendation === 'Declined' ? `
+                                    <span class="bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Declined</span>
+                                    ` : ''}
+                                </div>
+                                ` : `
+                                <div class="flex flex-col gap-1 w-32">
+                                    ${job.recommendation === 'Pending Approval' ? `
+                                    <span class="animate-pulse bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center font-semibold">PENDING CLIENT OK</span>
+                                    ` : job.recommendation === 'Approved' ? `
+                                    <span class="bg-green-100 text-green-700 border border-green-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Approved</span>
+                                    ` : job.recommendation === 'Declined' ? `
+                                    <span class="bg-red-100 text-red-700 border border-red-200 px-2 py-0.5 rounded text-[9px] font-black uppercase text-center">Declined</span>
+                                    ` : `<span class="text-xs text-gray-500 font-medium">None</span>`}
+                                    <span class="text-[10px] text-gray-500 block truncate max-w-[120px]" title="${job.recommendationNotes || ''}">${job.recommendationNotes || ''}</span>
+                                </div>
+                                `}
                             </td>
                             
                             <!-- SLA status -->
                             ${showGoal ? `
-                            <td class="px-3 py-4" style="min-width: 140px;">
+                            <td class="px-3 py-4">
                                 <span class="px-2 py-1 rounded text-xs font-bold uppercase ${job.goalStatus === 'Successful' ? 'bg-green-50 text-green-700 border border-green-100' : job.goalStatus === 'Failed' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-gray-100 text-gray-700'}">
                                     ${job.goalStatus || 'N/A'}
                                 </span>
@@ -3248,22 +3670,23 @@
                             ` : ''}
                             
                             <!-- Status -->
-                            <td class="px-3 py-4" style="min-width: 160px;">
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <select onchange="handleStatusChange('${job.id}', this.value, this)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white" style="${job.status === 'Ready' ? 'color:#10b981' : job.status === 'Carry Over' ? 'color:#f97316' : 'color:#374151'}">
+                                <select onchange="handleStatusChange('${job.id}', this.value, this)" class="table-select font-bold text-xs uppercase w-40 border border-gray-200 bg-white" style="${job.status === 'Ready' ? 'color:#10b981' : job.status === 'Carry Over' ? 'color:#f97316' : 'color:#374151'}">
                                     <option value="Waiting" ${job.status === 'Waiting' ? 'selected' : ''}>Waiting</option>
                                     <option value="In Progress" ${job.status === 'In Progress' || job.status.startsWith('Lift') ? 'selected' : ''} disabled>In Progress</option>
                                     <option value="Ready" ${job.status === 'Ready' ? 'selected' : ''}>Ready (Show TV)</option>
                                     <option value="Carry Over" ${job.status === 'Carry Over' ? 'selected' : ''}>Carry Over</option>
-                                    <option value="Released" ${job.status === 'Released' ? 'selected' : ''}>Released (TV Release)</option>
+                                    <option value="Released" ${job.status === 'Released' ? 'selected' : ''}>Released (Remove List)</option>
                                 </select>
                                 ` : `<span class="px-2 py-1 rounded bg-gray-100 text-xs font-bold uppercase text-gray-700">${job.status}</span>`}
                             </td>
+
                             <!-- Location -->
-                            <td class="px-3 py-4" style="min-width: 140px;">
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <select onchange="updateJobField('${job.id}', 'location', this.value)" class="table-select font-bold text-xs uppercase w-full border border-gray-200 bg-white cursor-pointer" style="${job.location !== 'None' ? 'color:#dc2626' : 'color:#6b7280'}">
-                                    <option value="None" ${job.location === 'None' ? 'selected' : ''}>None</option>
+                                <select onchange="updateJobField('${job.id}', 'location', this.value)" class="table-select font-bold text-xs uppercase w-36 border border-gray-200 bg-white" style="${job.location !== 'None' ? 'background-color:#fee2e2; color:#b91c1c; border-color:#fca5a5;' : 'color:#6b7280; background-color:#ffffff;'}">
+                                    <option value="None" ${job.location === 'None' ? 'selected' : ''}>Waiting Area</option>
                                     ${[1, 2, 3, 4].map(i => {
                                         const liftName = `Lift ${i}`;
                                         const occupiedBy = rowOccupiedLifts[liftName];
@@ -3277,29 +3700,22 @@
                                 ` : (job.location && job.location.startsWith('Lift')) ? `<span class="px-2 py-1 rounded bg-red-100 text-xs font-bold uppercase text-red-700">${job.location}</span>` : `<span class="px-2 py-1 rounded bg-gray-100 text-xs font-bold uppercase text-gray-500">Waiting Area</span>`}
                             </td>
                             
-                            <!-- Promised Date -->
-                            <td class="px-3 py-4" style="min-width: 140px;">
-                                ${isEditable ? `
-                                <input type="date" value="${job.promisedDate || ''}" onchange="updateJobField('${job.id}', 'promisedDate', this.value)" class="table-select text-xs w-full border border-gray-200 bg-white">
-                                ` : `<span class="text-xs font-semibold text-gray-700">${job.promisedDate || 'TBD'}</span>`}
-                            </td>
-                            
                             <!-- Remarks -->
-                            <td class="px-3 py-4" style="min-width: 180px;">
+                            <td class="px-3 py-4">
                                 ${isEditable ? `
-                                <input type="text" value="${job.remarks || ''}" placeholder="Remarks/Reasons..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white">
+                                <input type="text" value="${job.remarks || ''}" placeholder="Remarks/Reasons..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white">
                                 ` : `<span class="text-sm font-medium text-gray-600">${job.remarks || '-'}</span>`}
                             </td>
 
                             <!-- Action -->
-                            <td class="px-3 py-4 text-right" style="min-width: 180px;">
+                            <td class="px-3 py-4 text-right">
                                 <div class="flex items-center gap-2 justify-end">
                                     ${job.status === 'Released' && isEditable ? `
                                         <button onclick="completeRelease('${job.id}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-lg text-[11px] font-black uppercase transition shadow-sm whitespace-nowrap flex items-center gap-1" title="Finalize and remove from list">
                                             <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Released
                                         </button>
                                     ` : isEditable ? `
-                                        <input type="text" value="${job.concern || ''}" placeholder="Edit Concerns/Notes..." onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-gray-900 border border-gray-200 w-full bg-white text-left text-xs">
+                                        <input type="text" value="${job.concern || ''}" placeholder="Edit Concerns/Notes..." onchange="updateJobField('${job.id}', 'concern', this.value)" class="table-select text-gray-900 border border-gray-200 w-36 bg-white text-left text-xs">
                                     ` : `<span class="text-xs font-semibold text-gray-600">${job.concern || '-'}</span>`}
                                 </div>
                             </td>
@@ -3340,16 +3756,16 @@
                                 <div class="flex items-center gap-3">
                                     <div class="p-2 bg-red-50 rounded-lg text-red-600"><i data-lucide="list-todo" class="w-5 h-5"></i></div>
                                     <div>
-                                        <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table - Marikina</h3>
+                                        <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Daily Intakes Table</h3>
                                         <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Active Vehicles in Workshop</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="overflow-x-auto max-h-[400px] overflow-y-auto border border-gray-200 rounded-xl custom-scroll bg-white">
-                                <table class="w-full text-left whitespace-nowrap min-w-[1650px]">
+                                <table class="w-full text-left whitespace-nowrap min-w-[800px]">
                                     ${getTableHeaderHtml()}
                                     <tbody>
-                                        ${renderJobRows(isSA ? filteredActiveJobs : activeJobs) || `<tr><td colspan="${showGoal ? 16 : 15}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
+                                        ${renderJobRows(isSA ? filteredActiveJobs : activeJobs) || `<tr><td colspan="${showGoal ? 15 : 14}" class="text-center py-8 text-gray-500 font-medium">No active vehicles in the queue.</td></tr>`}
                                     </tbody>
                                 </table>
                             </div>
@@ -4812,6 +5228,9 @@
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('app-shell').classList.remove('hidden');
             document.querySelector('header').classList.add('hidden');
+            
+            const sidebar = document.getElementById('app-sidebar');
+            if (sidebar) sidebar.classList.add('hidden');
 
             const mainContent = document.getElementById('main-content');
             mainContent.classList.remove('p-6', 'md:p-10');
