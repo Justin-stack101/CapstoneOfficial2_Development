@@ -104,6 +104,10 @@ const jobSchema = new mongoose.Schema({
     type: String, // YYYY-MM-DD format
     default: ''
   },
+  carryOverStatus: {
+    type: String,
+    default: ''
+  },
   remarks: {
     type: String,
     default: ''

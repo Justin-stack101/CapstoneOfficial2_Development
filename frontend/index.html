@@ -1239,14 +1239,7 @@
                         </div>
                         <!-- Booking Specific (Assistant Role) -->
                         <div id="div-booking-fields"
-                            class="md:col-span-4 grid grid-cols-1 md:grid-cols-4 gap-4 hidden border-t border-gray-100 pt-4 mt-1">
-                            <div class="md:col-span-1">
-                                <label
-                                    class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Appt
-                                    Date</label>
-                                <input type="date" id="intake-appt-date"
-                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
-                            </div>
+                            class="md:col-span-4 grid grid-cols-1 md:grid-cols-3 gap-4 hidden border-t border-gray-100 pt-4 mt-1">
                             <div class="md:col-span-1">
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Appt
@@ -1401,6 +1394,7 @@
                                     <th class="px-3 py-3.5 bg-gray-55">Parts</th>
                                     <th class="px-3 py-3.5 bg-gray-55">Service Advisor</th>
                                     <th class="px-3 py-3.5 bg-gray-55">Evaluation</th>
+                                    <th class="px-3 py-3.5 bg-gray-55">Status</th>
                                     <th class="px-3 py-3.5 bg-gray-55">Remarks / Reasons</th>
                                     <th class="px-3 py-3.5 text-right w-48 bg-gray-55">Action</th>
                                 </tr>
@@ -2322,7 +2316,7 @@
     <div id="carryover-modal" class="fixed inset-0 z-[700] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm">
         <div class="bg-white rounded-3xl p-6 max-w-md w-full border border-gray-200 shadow-2xl space-y-4">
             <div class="flex items-center gap-3 border-b border-gray-150 pb-3">
-                <div class="p-2.5 bg-orange-50 text-orange-650 rounded-xl"><i data-lucide="calendar-off" class="w-6 h-6 text-orange-600"></i></div>
+                <div class="p-2.5 bg-orange-50 text-orange-655 rounded-xl"><i data-lucide="calendar-off" class="w-6 h-6 text-orange-600"></i></div>
                 <div>
                     <h3 class="text-lg font-black uppercase tracking-tight text-gray-900">Carry-Over Details</h3>
                     <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-0.5">Specify reasons and promised date</p>
@@ -2335,7 +2329,16 @@
                     <input type="date" id="carryover-promised-date" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-bold text-sm focus:border-orange-500 transition">
                 </div>
                 <div>
-                    <label class="text-[10px] text-gray-650 font-bold uppercase tracking-wider mb-1 block">Remarks / Reasons for Delay <span class="text-red-500">*</span></label>
+                    <label class="text-[10px] text-gray-600 font-bold uppercase tracking-wider mb-1 block">Carry-Over Status <span class="text-red-500">*</span></label>
+                    <select id="carryover-status" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 outline-none font-bold text-xs focus:border-orange-500 transition cursor-pointer">
+                        <option value="Awaiting Parts">Awaiting Parts</option>
+                        <option value="Extended Repair">Extended Repair</option>
+                        <option value="Technician Unavailable">Technician Unavailable</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[10px] text-gray-655 font-bold uppercase tracking-wider mb-1 block">Reasons / Remarks <span class="text-red-500">*</span></label>
                     <textarea id="carryover-remarks" placeholder="Specify parts delay, technician unavailability, or extended repair scope..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:border-orange-500 outline-none font-semibold text-xs h-24 resize-none"></textarea>
                 </div>
             </div>
@@ -3229,7 +3232,7 @@
             if (isWalkin) {
                 arrival = document.getElementById('intake-arrival').value || new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
             } else {
-                apptDate = document.getElementById('intake-appt-date').value;
+                apptDate = date;
                 apptTime = document.getElementById('intake-appt-time').value;
                 confirmed = document.getElementById('intake-confirmed').checked;
                 laneType = document.getElementById('intake-lane-type').value;
@@ -3247,7 +3250,7 @@
                 await loadData();
                 showSystemToast(`${plate} added successfully.`, 'success');
 
-                ['plate', 'name', 'contact', 'vehicle', 'arrival', 'appt-time', 'appt-date', 'concern'].forEach(id => {
+                ['plate', 'name', 'contact', 'vehicle', 'arrival', 'appt-time', 'concern'].forEach(id => {
                     if (document.getElementById(`intake-${id}`)) document.getElementById(`intake-${id}`).value = '';
                 });
 
@@ -3392,19 +3395,20 @@
 
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
-            if (timeStr.includes('AM') || timeStr.includes('PM') || timeStr.includes('am') || timeStr.includes('pm')) {
-                return timeStr;
+            const lower = timeStr.toLowerCase();
+            if (lower.includes('am') || lower.includes('pm')) {
+                const isPm = lower.includes('pm');
+                const clean = timeStr.replace(/am|pm/gi, '').trim();
+                const parts = clean.split(':');
+                if (parts.length >= 2) {
+                    let hour = parseInt(parts[0], 10);
+                    const minute = parts[1].trim();
+                    if (isPm && hour < 12) hour += 12;
+                    if (!isPm && hour === 12) hour = 0;
+                    return `${String(hour).padStart(2, '0')}:${minute}`;
+                }
             }
-            const parts = timeStr.split(':');
-            if (parts.length < 2) return timeStr;
-            let hour = parseInt(parts[0], 10);
-            const minute = parts[1];
-            if (isNaN(hour)) return timeStr;
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            hour = hour % 12;
-            hour = hour ? hour : 12;
-            const padHour = String(hour).padStart(2, '0');
-            return `${padHour}:${minute} ${ampm}`;
+            return timeStr;
         }
 
         function calculateGoalStatusForJob(job) {
@@ -3522,6 +3526,11 @@
             // DAILY INTAKES
             if (!isTech && document.getElementById('container-daily-intakes')) {
                 const activeJobs = allJobs.filter(j => j.status !== 'Pending' && j.status !== 'Carry Over' && j.status !== 'Completed');
+                activeJobs.sort((a, b) => {
+                    const stubA = a.claimStub || 'zzzzz';
+                    const stubB = b.claimStub || 'zzzzz';
+                    return stubA.localeCompare(stubB);
+                });
                 const showGoal = isOwnerOrAdmin;
 
                 const getTableHeaderHtml = () => {
@@ -3823,7 +3832,17 @@
                             ${isEditable ? `<input type="text" value="${job.evaluation || ''}" onchange="updateJobField('${job.id}', 'evaluation', this.value)" class="table-select text-gray-900 font-medium w-48 border border-gray-200 bg-white">` : `<span class="text-gray-700 text-sm">${job.evaluation || '-'}</span>`}
                         </td>
                         <td class="px-3 py-4">
-                            ${isEditable ? `<input type="text" value="${job.remarks || ''}" placeholder="Status, Reasons..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 font-medium w-48 border border-gray-200 bg-white">` : `<span class="text-gray-700 text-sm block">${job.remarks || '-'}</span>`}
+                            ${isEditable ? `
+                            <select onchange="updateJobField('${job.id}', 'carryOverStatus', this.value)" class="table-select font-bold text-xs uppercase w-36 border border-gray-200 bg-white cursor-pointer">
+                                <option value="Awaiting Parts" ${job.carryOverStatus === 'Awaiting Parts' ? 'selected' : ''}>Awaiting Parts</option>
+                                <option value="Extended Repair" ${job.carryOverStatus === 'Extended Repair' ? 'selected' : ''}>Extended Repair</option>
+                                <option value="Technician Unavailable" ${job.carryOverStatus === 'Technician Unavailable' ? 'selected' : ''}>Technician Unavailable</option>
+                                <option value="Others" ${job.carryOverStatus === 'Others' ? 'selected' : ''}>Others</option>
+                            </select>
+                            ` : `<span class="text-xs font-bold uppercase text-gray-700">${job.carryOverStatus || 'Awaiting Parts'}</span>`}
+                        </td>
+                        <td class="px-3 py-4">
+                            ${isEditable ? `<input type="text" value="${job.remarks || ''}" placeholder="Reasons for delay..." onchange="updateJobField('${job.id}', 'remarks', this.value)" class="table-select text-gray-900 font-medium w-48 border border-gray-200 bg-white">` : `<span class="text-gray-700 text-sm block">${job.remarks || '-'}</span>`}
                         </td>
                         <td class="px-3 py-4 text-right">
                             ${actions}
@@ -3941,6 +3960,7 @@
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             document.getElementById('carryover-promised-date').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('carryover-status').value = 'Awaiting Parts';
             document.getElementById('carryover-remarks').value = '';
             
             document.getElementById('carryover-modal').classList.remove('hidden');
@@ -3961,6 +3981,7 @@
         async function submitCarryoverDetails() {
             const jobId = document.getElementById('carryover-job-id').value;
             const promisedDate = document.getElementById('carryover-promised-date').value;
+            const carryOverStatus = document.getElementById('carryover-status').value;
             const remarks = document.getElementById('carryover-remarks').value.trim();
             
             if (!promisedDate || !remarks) {
@@ -3971,6 +3992,10 @@
                 await apiRequest(`/api/jobs/${jobId}/field`, {
                     method: 'PATCH',
                     body: { field: 'remarks', value: remarks }
+                });
+                await apiRequest(`/api/jobs/${jobId}/field`, {
+                    method: 'PATCH',
+                    body: { field: 'carryOverStatus', value: carryOverStatus }
                 });
                 await apiRequest(`/api/jobs/${jobId}/field`, {
                     method: 'PATCH',
@@ -5425,7 +5450,7 @@
 
         function updateClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
             if (document.getElementById('sys-clock')) document.getElementById('sys-clock').innerText = timeStr;
             if (document.getElementById('tv-clock-display')) document.getElementById('tv-clock-display').innerText = timeStr;
             
