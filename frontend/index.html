@@ -1226,7 +1226,7 @@
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Arrival
                                     Time <span class="text-red-500">*</span></label>
-                                <input type="time" id="intake-arrival"
+                                <input type="text" id="intake-arrival" placeholder="e.g. 13:00 (24h)" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM), e.g. 13:00"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
                             </div>
                             <div class="md:col-span-1">
@@ -1244,7 +1244,7 @@
                                 <label
                                     class="text-[10px] text-gray-800 font-bold uppercase tracking-wider mb-1 block">Appt
                                     Time</label>
-                                <input type="time" id="intake-appt-time"
+                                <input type="text" id="intake-appt-time" placeholder="e.g. 13:00 (24h)" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM), e.g. 13:00"
                                     class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:border-red-600 focus:bg-white outline-none font-semibold text-xs text-gray-900 transition">
                             </div>
                             <div class="md:col-span-1">
@@ -3395,24 +3395,20 @@
 
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
-            const clean = timeStr.replace(/am|pm/gi, '').trim();
-            const parts = clean.split(':');
-            if (parts.length < 2) return timeStr;
-            let hour = parseInt(parts[0], 10);
-            const minute = parts[1].trim();
-            if (isNaN(hour)) return timeStr;
-            
-            let isPm = false;
-            if (timeStr.toLowerCase().includes('pm')) {
-                isPm = true;
-            } else if (!timeStr.toLowerCase().includes('am') && hour >= 12) {
-                isPm = true;
+            const lower = timeStr.toLowerCase();
+            if (lower.includes('am') || lower.includes('pm')) {
+                const isPm = lower.includes('pm');
+                const clean = timeStr.replace(/am|pm/gi, '').trim();
+                const parts = clean.split(':');
+                if (parts.length >= 2) {
+                    let hour = parseInt(parts[0], 10);
+                    const minute = parts[1].trim();
+                    if (isPm && hour < 12) hour += 12;
+                    if (!isPm && hour === 12) hour = 0;
+                    return `${String(hour).padStart(2, '0')}:${minute}`;
+                }
             }
-            
-            hour = hour % 12;
-            hour = hour ? hour : 12;
-            const ampm = isPm ? 'PM' : 'AM';
-            return `${String(hour).padStart(2, '0')}:${minute} ${ampm}`;
+            return timeStr;
         }
 
         function calculateGoalStatusForJob(job) {
@@ -3475,7 +3471,7 @@
                             <td>
                                 <div class="flex gap-2">
                                     <input type="date" value="${job.apptDate}" onchange="updateJobField('${job.id}', 'apptDate', this.value)" class="table-select text-sm w-32 border border-gray-200">
-                                    <input type="time" value="${job.apptTime}" onchange="updateJobField('${job.id}', 'apptTime', this.value)" class="table-select text-sm w-24 border border-gray-200">
+                                    <input type="text" value="${job.apptTime}" placeholder="13:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'apptTime', this.value)" class="table-select text-sm w-24 border border-gray-200">
                                 </div>
                             </td>
                             <td>
@@ -3606,12 +3602,12 @@
 
                             <!-- Arrival -->
                             <td class="px-3 py-4">
-                                ${canEditArrival ? `<input type="time" value="${job.arrival || ''}" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
+                                ${canEditArrival ? `<input type="text" value="${job.arrival || ''}" placeholder="13:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'arrival', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.arrival)}</span>`}
                             </td>
                             
                             <!-- Departure -->
                             <td class="px-3 py-4">
-                                ${isEditable ? `<input type="time" value="${job.departure || ''}" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
+                                ${isEditable ? `<input type="text" value="${job.departure || ''}" placeholder="15:00" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Enter time in 24-hour format (HH:MM)" onchange="updateJobField('${job.id}', 'departure', this.value)" class="table-select text-sm w-28 border border-gray-200 bg-white">` : `<span class="text-sm font-medium text-gray-600">${formatTime12Hour(job.departure)}</span>`}
                             </td>
                             
 
@@ -4657,7 +4653,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Draw header bar (Red theme)
@@ -4791,7 +4787,7 @@
             showSystemToast('Consolidating data for Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Prepare metrics
@@ -4929,7 +4925,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5075,7 +5071,7 @@
             showSystemToast('Consolidating data for analytics Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5442,7 +5438,7 @@
 
         function updateClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
             if (document.getElementById('sys-clock')) document.getElementById('sys-clock').innerText = timeStr;
             if (document.getElementById('tv-clock-display')) document.getElementById('tv-clock-display').innerText = timeStr;
             
