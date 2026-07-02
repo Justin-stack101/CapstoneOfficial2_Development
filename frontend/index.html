@@ -3395,20 +3395,24 @@
 
         function formatTime12Hour(timeStr) {
             if (!timeStr) return '--:--';
-            const lower = timeStr.toLowerCase();
-            if (lower.includes('am') || lower.includes('pm')) {
-                const isPm = lower.includes('pm');
-                const clean = timeStr.replace(/am|pm/gi, '').trim();
-                const parts = clean.split(':');
-                if (parts.length >= 2) {
-                    let hour = parseInt(parts[0], 10);
-                    const minute = parts[1].trim();
-                    if (isPm && hour < 12) hour += 12;
-                    if (!isPm && hour === 12) hour = 0;
-                    return `${String(hour).padStart(2, '0')}:${minute}`;
-                }
+            const clean = timeStr.replace(/am|pm/gi, '').trim();
+            const parts = clean.split(':');
+            if (parts.length < 2) return timeStr;
+            let hour = parseInt(parts[0], 10);
+            const minute = parts[1].trim();
+            if (isNaN(hour)) return timeStr;
+            
+            let isPm = false;
+            if (timeStr.toLowerCase().includes('pm')) {
+                isPm = true;
+            } else if (!timeStr.toLowerCase().includes('am') && hour >= 12) {
+                isPm = true;
             }
-            return timeStr;
+            
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            const ampm = isPm ? 'PM' : 'AM';
+            return `${String(hour).padStart(2, '0')}:${minute} ${ampm}`;
         }
 
         function calculateGoalStatusForJob(job) {
@@ -4653,7 +4657,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Draw header bar (Red theme)
@@ -4787,7 +4791,7 @@
             showSystemToast('Consolidating data for Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const todayStr = new Date().toISOString().split('T')[0];
 
             // Prepare metrics
@@ -4925,7 +4929,7 @@
             const doc = new jsPDF('p', 'mm', 'a4');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5071,7 +5075,7 @@
             showSystemToast('Consolidating data for analytics Word export...', 'info', 'Management Module');
 
             const today = new Date().toLocaleDateString();
-            const time = new Date().toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const time = new Date().toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
             const scope = document.getElementById('analytics-scope').value;
             const periodText = document.getElementById('analytics-period-label').innerText.replace('Period: ', '');
 
@@ -5438,7 +5442,7 @@
 
         function updateClock() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' });
             if (document.getElementById('sys-clock')) document.getElementById('sys-clock').innerText = timeStr;
             if (document.getElementById('tv-clock-display')) document.getElementById('tv-clock-display').innerText = timeStr;
             
